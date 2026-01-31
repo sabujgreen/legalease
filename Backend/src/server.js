@@ -12,4 +12,3 @@ connectDB().then(() => {
   });
 });
 
-//this is a test comment
