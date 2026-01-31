@@ -11,3 +11,5 @@ connectDB().then(() => {
     console.log(`LegalEase backend running on port ${PORT}`);
   });
 });
+
+//this is a test comment
