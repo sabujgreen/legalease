@@ -1,18 +1,24 @@
 import { useEffect, useState } from "react";
 import { useAppContext } from "../context/AppContext";
+import { verifyOtp } from "../services/auth.api";
+import { useAuth } from "../context/AuthContext";
 
 const OtpModal = () => {
+  const { login } = useAuth();
+
   const {
     setShowOtp,
     setShowRegister,
     setShowLogin,
     otpSource,
+    otpUserId,        // ✅ THIS WAS MISSING
   } = useAppContext();
 
   const [timer, setTimer] = useState(60);
   const [otp, setOtp] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  // Countdown timer
+  // countdown timer
   useEffect(() => {
     if (timer === 0) return;
 
@@ -22,6 +28,26 @@ const OtpModal = () => {
 
     return () => clearInterval(interval);
   }, [timer]);
+
+  const handleVerify = async () => {
+    try {
+      setLoading(true);
+
+      await verifyOtp({
+        userId: otpUserId,   // ✅ CORRECT USER ID
+        otp,
+      });
+
+      // Cookie is set by backend, now fetch user data
+      await login();
+      setShowOtp(false);
+
+    } catch (e) {
+      alert(e.response?.data?.message || "Invalid or expired OTP");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleResend = () => {
     setTimer(60);
@@ -34,7 +60,7 @@ const OtpModal = () => {
     if (otpSource === "register") {
       setShowRegister(true);
     } else if (otpSource === "forgot") {
-      setShowLogin(true); // later replace with Forgot modal
+      setShowLogin(true);
     }
   };
 
@@ -70,9 +96,11 @@ const OtpModal = () => {
 
         {/* Verify Button */}
         <button
-          className="w-full mt-6 px-4 py-2 rounded-lg bg-primary text-white font-medium hover:bg-primary-dull transition-colors"
+          onClick={handleVerify}
+          disabled={loading}
+          className="w-full mt-6 px-4 py-2 rounded-lg bg-primary text-white font-medium hover:bg-primary-dull transition-colors disabled:opacity-60"
         >
-          Verify OTP
+          {loading ? "Verifying..." : "Verify OTP"}
         </button>
 
         {/* Resend */}

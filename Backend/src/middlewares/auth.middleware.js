@@ -3,13 +3,13 @@ import User from "../models/User.model.js";
 
 export const protect = async (req, res, next) => {
   try {
-    const authHeader = req.headers.authorization;
+    // ✅ Read token from cookie instead of Authorization header
+    const token = req.cookies.token;
 
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      return res.status(401).json({ message: "Unauthorized" });
+    if (!token) {
+      return res.status(401).json({ message: "Unauthorized - No token provided" });
     }
 
-    const token = authHeader.split(" ")[1];
     const decoded = verifyToken(token);
 
     const user = await User.findById(decoded.id);

@@ -1,4 +1,6 @@
 import express from "express";
+import cors from "cors";
+
 import authRoutes from "./modules/auth/auth.routes.js";
 import testRoutes from "./routes/test.routes.js";
 import roleTestRoutes from "./routes/role-test.routes.js";
@@ -6,8 +8,18 @@ import lawyerRoutes from "./modules/lawyer/lawyer.routes.js";
 import adminRoutes from "./modules/admin/admin.routes.js";
 import caseRoutes from "./modules/case/case.routes.js";
 import userRoutes from "./modules/user/user.routes.js";
+import cookieParser from "cookie-parser";
 
 const app = express();
+app.use(cookieParser());
+
+app.use(
+  cors({
+    origin: "http://localhost:5173", // frontend URL
+    credentials: true,
+  })
+);
+
 app.use(express.json());
 
 app.use("/api/auth", authRoutes);

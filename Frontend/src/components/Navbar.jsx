@@ -1,5 +1,6 @@
 import { NavLink } from "react-router-dom";
 import { useAppContext } from "../context/AppContext";
+import { useAuth } from "../context/AuthContext";
 
 
 const navItems = [
@@ -12,6 +13,7 @@ const navItems = [
 ];
 
 const Navbar = () => {
+    const { isAuthenticated, logout } = useAuth();
     const { setShowLogin } = useAppContext();
 
   return (
@@ -43,12 +45,18 @@ const Navbar = () => {
         </div>
 
         {/* Right: Login */}
-        <button
-        onClick={() => setShowLogin(true)}
-        className="px-4 py-2 text-sm font-medium rounded-lg border border-primary text-primary hover:bg-primary hover:text-white transition-colors"
-        >
-        Login
-        </button>
+        {isAuthenticated ? (
+          <button
+            onClick={logout}
+            className="px-4 py-2 text-sm rounded-lg border border-primary text-primary"
+          >
+            Logout
+          </button>
+        ) : (
+          <button onClick={() => setShowLogin(true)} className="...">
+            Login
+          </button>
+        )}
 
 
       </div>

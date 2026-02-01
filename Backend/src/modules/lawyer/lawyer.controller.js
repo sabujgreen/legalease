@@ -24,3 +24,19 @@ export const applyAsLawyer = async (req, res) => {
     status: profile.verificationStatus,
   });
 };
+
+
+
+
+export const getApprovedLawyers = async (req, res) => {
+  try {
+    const lawyers = await LawyerProfile.find({
+      verificationStatus: "APPROVED",
+      isAvailable: true,
+    }).populate("userId", "name email");
+
+    res.json(lawyers);
+  } catch (err) {
+    res.status(500).json({ message: "Failed to fetch lawyers" });
+  }
+};

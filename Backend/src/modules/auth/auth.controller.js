@@ -38,8 +38,28 @@ export const verifyEmailOtp = async (req, res) => {
     return res.status(400).json({ message: "Invalid or expired OTP" });
   }
 
-  res.json({ message: "Email verified successfully" });
+  const user = await User.findById(userId);
+
+  const token = generateToken({
+    id: user._id,
+    role: user.role,
+  });
+
+  res.cookie("token", token, {
+    httpOnly: true,
+    secure: false,      // localhost
+    sameSite: "lax",
+    path: "/",
+    maxAge: 7 * 24 * 60 * 60 * 1000, // ✅ ADD THIS (7 days)
+  });
+
+
+
+  res.json({
+    message: "Email verified successfully",
+  });
 };
+
 
 /**
  * Login user
@@ -66,9 +86,18 @@ export const login = async (req, res) => {
     role: user.role,
   });
 
+  res.cookie("token", token, {
+    httpOnly: true,
+    secure: false,      // localhost
+    sameSite: "lax",
+    path: "/",
+    maxAge: 7 * 24 * 60 * 60 * 1000, // ✅ ADD THIS (7 days)
+  });
+
+
   res.json({
     message: "Login successful",
-    token,
   });
+
 };
 

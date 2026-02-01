@@ -11,6 +11,10 @@ export const AppProvider = ({ children }) => {
   const [otpEmail, setOtpEmail] = useState("");
   const [showRegister, setShowRegister] = useState(false);
   const [otpSource, setOtpSource] = useState(null); 
+  const [otpUserId, setOtpUserId] = useState(null);
+
+
+
 
 
   const value = {
@@ -28,6 +32,8 @@ export const AppProvider = ({ children }) => {
     setShowRegister,
     otpSource,
     setOtpSource,
+    otpUserId,
+    setOtpUserId,
   };
 
   return (

@@ -1,7 +1,45 @@
+import { useState } from "react";
+import { registerUser } from "../services/auth.api";
 import { useAppContext } from "../context/AppContext";
 
 const RegisterModal = () => {
-  const { setShowRegister, setShowLogin, setShowOtp, setOtpSource } = useAppContext();
+  const {
+    setShowRegister,
+    setShowLogin,
+    setShowOtp,
+    setOtpSource,
+    setOtpUserId,
+  } = useAppContext();
+
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleRegister = async () => {
+    try {
+      setLoading(true);
+
+      const res = await registerUser({
+        name,
+        email,
+        password,
+      });
+
+      // store userId for OTP verification
+      setOtpUserId(res.data.userId);
+      setOtpSource("register");
+
+      // switch modals
+      setShowRegister(false);
+      setShowOtp(true);
+
+    } catch (e) {
+      alert(e.response?.data?.message || "Registration failed");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const goToLogin = () => {
     setShowRegister(false);
@@ -31,13 +69,15 @@ const RegisterModal = () => {
         {/* Form */}
         <div className="mt-6 space-y-4">
 
-          {/* Name */}
+          {/* Full Name */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Full Name
             </label>
             <input
               type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
               placeholder="Enter your name"
               className="w-full px-4 py-2 rounded-lg border border-borderColor focus:outline-none focus:ring-2 focus:ring-primary"
             />
@@ -50,6 +90,8 @@ const RegisterModal = () => {
             </label>
             <input
               type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               placeholder="Enter your email"
               className="w-full px-4 py-2 rounded-lg border border-borderColor focus:outline-none focus:ring-2 focus:ring-primary"
             />
@@ -62,22 +104,21 @@ const RegisterModal = () => {
             </label>
             <input
               type="password"
-              placeholder="Create a password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Create a password (min 8 chars)"
               className="w-full px-4 py-2 rounded-lg border border-borderColor focus:outline-none focus:ring-2 focus:ring-primary"
             />
           </div>
 
           {/* Register Button */}
-        <button
-        onClick={() => {
-            setShowRegister(false);
-            setOtpSource("register");
-            setShowOtp(true);
-        }}
-        className="w-full mt-2 px-4 py-2 rounded-lg bg-primary text-white font-medium hover:bg-primary-dull transition-colors"
-        >
-        Register
-        </button>
+          <button
+            onClick={handleRegister}
+            disabled={loading}
+            className="w-full mt-2 px-4 py-2 rounded-lg bg-primary text-white font-medium hover:bg-primary-dull transition-colors disabled:opacity-60"
+          >
+            {loading ? "Registering..." : "Register"}
+          </button>
 
         </div>
 

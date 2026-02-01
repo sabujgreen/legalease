@@ -1,51 +1,26 @@
-import { useState } from "react";
-
-const dummyLawyers = [
-  {
-    id: 1,
-    name: "Adv. Rahul Sharma",
-    specialization: "Criminal Law",
-    location: "Delhi",
-    experience: "8 years",
-  },
-  {
-    id: 2,
-    name: "Adv. Neha Verma",
-    specialization: "Family Law",
-    location: "Mumbai",
-    experience: "5 years",
-  },
-  {
-    id: 3,
-    name: "Adv. Amit Patel",
-    specialization: "Property Law",
-    location: "Ahmedabad",
-    experience: "10 years",
-  },
-  {
-    id: 4,
-    name: "Adv. Pooja Singh",
-    specialization: "Consumer Law",
-    location: "Bhopal",
-    experience: "6 years",
-  },
-  {
-    id: 5,
-    name: "Adv. Rakesh Mehta",
-    specialization: "Corporate Law",
-    location: "Bangalore",
-    experience: "12 years",
-  },
-];
+import { useEffect, useState } from "react";
+import { fetchLawyers } from "../services/lawyer.api";
 
 const ContactLawyer = () => {
   const [search, setSearch] = useState("");
+  const [lawyers, setLawyers] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-  const filteredLawyers = dummyLawyers.filter((lawyer) =>
-    `${lawyer.name} ${lawyer.specialization} ${lawyer.location}`
-      .toLowerCase()
-      .includes(search.toLowerCase())
-  );
+  useEffect(() => {
+    const loadLawyers = async () => {
+      try {
+        setLoading(true);
+        const res = await fetchLawyers(search);
+        setLawyers(res.data);
+      } catch (err) {
+        console.error("Failed to fetch lawyers", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadLawyers();
+  }, [search]);
 
   return (
     <section className="px-8 py-12">
@@ -72,29 +47,33 @@ const ContactLawyer = () => {
 
         {/* Lawyers List */}
         <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {filteredLawyers.length > 0 ? (
-            filteredLawyers.map((lawyer) => (
+          {loading ? (
+            <p className="text-gray-500 col-span-full">
+              Loading lawyers...
+            </p>
+          ) : lawyers.length > 0 ? (
+            lawyers.map((lawyer) => (
               <div
-                key={lawyer.id}
+                key={lawyer._id}
                 className="bg-white border border-borderColor rounded-xl p-5 hover:shadow-md transition-shadow"
               >
                 <h2 className="text-lg font-semibold text-gray-900">
-                  {lawyer.name}
+                  {lawyer.userId.name}
                 </h2>
 
                 <p className="mt-1 text-sm text-gray-600">
                   <span className="font-medium">Specialization:</span>{" "}
-                  {lawyer.specialization}
+                  {lawyer.specialization.join(", ")}
                 </p>
 
                 <p className="text-sm text-gray-600">
                   <span className="font-medium">Location:</span>{" "}
-                  {lawyer.location}
+                  {lawyer.location.city}, {lawyer.location.state}
                 </p>
 
                 <p className="text-sm text-gray-600">
                   <span className="font-medium">Experience:</span>{" "}
-                  {lawyer.experience}
+                  {lawyer.experienceYears} years
                 </p>
 
                 <button

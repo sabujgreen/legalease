@@ -6,6 +6,7 @@ import { applyLawyerSchema } from "./lawyer.schema.js";
 import { onlyApprovedLawyer } from "../../middlewares/lawyer.middleware.js";
 import { lawyerDashboard } from "./lawyer.dashboard.controller.js";
 import {  getAssignedCases, respondToCase} from "./lawyer.case.controller.js";
+import { getApprovedLawyers } from "./lawyer.controller.js";
 
 
 
@@ -50,5 +51,9 @@ router.post(
   allowRoles("LAWYER"),
   respondToCase
 );
+
+
+router.get("/", getApprovedLawyers);
+
 
 export default router;
