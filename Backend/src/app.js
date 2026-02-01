@@ -7,13 +7,6 @@ import adminRoutes from "./modules/admin/admin.routes.js";
 import caseRoutes from "./modules/case/case.routes.js";
 import userRoutes from "./modules/user/user.routes.js";
 
-
-
-
-
-
-
-
 const app = express();
 app.use(express.json());
 
