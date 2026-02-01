@@ -65,5 +65,16 @@ const caseSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+// Auto-generate caseId before saving
+caseSchema.pre("save", function () {
+  if (!this.caseId) {
+    const timestamp = Date.now();
+    const randomStr = Math.random().toString(36).substring(2, 6).toUpperCase();
+    this.caseId = `CASE-${timestamp}-${randomStr}`;
+  }
+});
+
+
 const Case = mongoose.model("Case", caseSchema);
 export default Case;
+

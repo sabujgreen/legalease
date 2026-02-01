@@ -8,8 +8,8 @@ export const analyzeCaseWithGroq = async ({ title, description, location }) => {
 
   const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
-  console.log("Groq API Key present:", !!process.env.GROQ_API_KEY);
-  console.log("API Key length:", process.env.GROQ_API_KEY?.length);
+  // console.log("Groq API Key present:", !!process.env.GROQ_API_KEY);
+  // console.log("API Key length:", process.env.GROQ_API_KEY?.length);
 
   try {
     // Using Llama 3.3 70B - extremely fast and powerful, completely free

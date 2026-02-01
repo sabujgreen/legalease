@@ -6,6 +6,7 @@ import SubmitQuery from "./pages/SubmitQuery";
 import LegalDocuments from "./pages/LegalDocuments";
 import ContactLawyer from "./pages/ContactLawyer";
 import Contact from "./pages/Contact";
+import LawyerResults from "./pages/LawyerResults";
 import LoginModal from "./components/LoginModal";
 import { useAppContext } from "./context/AppContext";
 import RegisterModal from "./components/RegisterModal";
@@ -31,6 +32,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/chatbot" element={<Chatbot />} />
           <Route path="/submit-query" element={<SubmitQuery />} />
+          <Route path="/case-result/:caseId" element={<LawyerResults />} />
           <Route path="/legal-documents" element={<LegalDocuments />} />
           <Route path="/contact-lawyer" element={<ContactLawyer />} />
           <Route path="/contact" element={<Contact />} />
@@ -41,3 +43,4 @@ function App() {
 }
 
 export default App;
+
