@@ -81,3 +81,4 @@ Location: ${location?.city || ""}, ${location?.state || ""}`
 
 // Keep the old function name for backward compatibility
 export default analyzeCaseWithGroq;
+

@@ -1,7 +1,6 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useAppContext } from "../context/AppContext";
 import { useAuth } from "../context/AuthContext";
-
 
 const navItems = [
   { name: "Home", path: "/" },
@@ -13,19 +12,20 @@ const navItems = [
 ];
 
 const Navbar = () => {
-    const { isAuthenticated, logout } = useAuth();
-    const { setShowLogin } = useAppContext();
+  const { isAuthenticated, logout } = useAuth();
+  const { setShowLogin } = useAppContext();
+  const navigate = useNavigate();
 
   return (
     <nav className="relative px-8 py-4 border-b border-borderColor bg-light">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
 
-        {/* Left: Logo */}
+        {/* LEFT: Logo */}
         <h1 className="text-xl font-bold text-primary">
           LegalEase
         </h1>
 
-        {/* Center: Links (absolute centered) */}
+        {/* CENTER: Navigation */}
         <div className="absolute left-1/2 -translate-x-1/2 flex gap-6">
           {navItems.map((item) => (
             <NavLink
@@ -44,20 +44,33 @@ const Navbar = () => {
           ))}
         </div>
 
-        {/* Right: Login */}
-        {isAuthenticated ? (
-          <button
-            onClick={logout}
-            className="px-4 py-2 text-sm rounded-lg border border-primary text-primary"
-          >
-            Logout
-          </button>
-        ) : (
-          <button onClick={() => setShowLogin(true)} className="...">
-            Login
-          </button>
-        )}
+        {/* RIGHT: Actions */}
+        <div className="flex items-center gap-3">
+          {isAuthenticated && (
+            <button
+              onClick={() => navigate("/dashboard")}
+              className="px-4 py-2 text-sm rounded-lg border border-primary text-primary hover:bg-primary hover:text-white transition"
+            >
+              Dashboard
+            </button>
+          )}
 
+          {isAuthenticated ? (
+            <button
+              onClick={logout}
+              className="px-4 py-2 text-sm rounded-lg border border-primary text-primary"
+            >
+              Logout
+            </button>
+          ) : (
+            <button
+              onClick={() => setShowLogin(true)}
+              className="px-4 py-2 text-sm rounded-lg border border-primary text-primary"
+            >
+              Login
+            </button>
+          )}
+        </div>
 
       </div>
     </nav>

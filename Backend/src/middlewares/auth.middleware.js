@@ -3,8 +3,14 @@ import User from "../models/User.model.js";
 
 export const protect = async (req, res, next) => {
   try {
-    // ✅ Read token from cookie instead of Authorization header
-    const token = req.cookies.token;
+    let token;
+
+    // ✅ Check for token in cookie (for browser) OR Authorization header (for Postman/API)
+    if (req.cookies.token) {
+      token = req.cookies.token;
+    } else if (req.headers.authorization && req.headers.authorization.startsWith("Bearer ")) {
+      token = req.headers.authorization.split(" ")[1];
+    }
 
     if (!token) {
       return res.status(401).json({ message: "Unauthorized - No token provided" });

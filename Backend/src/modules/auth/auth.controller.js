@@ -53,10 +53,9 @@ export const verifyEmailOtp = async (req, res) => {
     maxAge: 7 * 24 * 60 * 60 * 1000, // ✅ ADD THIS (7 days)
   });
 
-
-
   res.json({
     message: "Email verified successfully",
+    token, // ✅ Return token for Postman/API testing
   });
 };
 
@@ -94,9 +93,9 @@ export const login = async (req, res) => {
     maxAge: 7 * 24 * 60 * 60 * 1000, // ✅ ADD THIS (7 days)
   });
 
-
   res.json({
     message: "Login successful",
+    token, // ✅ Return token for Postman/API testing
   });
 
 };

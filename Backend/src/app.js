@@ -9,6 +9,8 @@ import adminRoutes from "./modules/admin/admin.routes.js";
 import caseRoutes from "./modules/case/case.routes.js";
 import userRoutes from "./modules/user/user.routes.js";
 import cookieParser from "cookie-parser";
+import chatbotRoutes from "./modules/chatbot/chatbot.routes.js";
+
 
 const app = express();
 app.use(cookieParser());
@@ -29,6 +31,8 @@ app.use("/api/lawyer", lawyerRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/cases", caseRoutes);
 app.use("/api/user", userRoutes);
+app.use("/api/chatbot", chatbotRoutes);
+
 
 
 app.get("/health", (req, res) => {
