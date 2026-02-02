@@ -1,53 +1,18 @@
-import { Link } from "react-router-dom";
+import DashboardLayout from "../layouts/DashboardLayout";
+import DashboardSidebar from "../components/DashboardSidebar";
 
 const UserDashboard = () => {
   return (
-    <div className="flex min-h-screen bg-light">
-
-      {/* SIDEBAR */}
-      <aside className="w-64 bg-white border-r border-borderColor px-6 py-8">
-        {/* Profile */}
-        <div className="flex flex-col items-center mb-10">
-          <img
-            src="https://i.pravatar.cc/100"
-            alt="profile"
-            className="w-20 h-20 rounded-full border"
-          />
-          <p className="mt-3 font-medium text-gray-800">Chirag</p>
-        </div>
-
-        {/* Navigation */}
-        <nav className="space-y-2">
-          <Link className="flex items-center gap-3 px-4 py-2 rounded-lg bg-primary text-white">
-            Dashboard
-          </Link>
-
-          <Link className="flex items-center gap-3 px-4 py-2 rounded-lg text-gray-700 hover:bg-light">
-            My Legal Cases
-          </Link>
-
-          <Link className="flex items-center gap-3 px-4 py-2 rounded-lg text-gray-700 hover:bg-light">
-            Documents
-          </Link>
-
-          <Link className="flex items-center gap-3 px-4 py-2 rounded-lg text-gray-700 hover:bg-light">
-            Notifications
-          </Link>
-
-          <Link className="flex items-center gap-3 px-4 py-2 rounded-lg text-gray-700 hover:bg-light">
-            Profile
-          </Link>
-        </nav>
-      </aside>
+    <DashboardLayout>
+      {/* SIDEBAR COMPONENT */}
+      <DashboardSidebar />
 
       {/* MAIN CONTENT */}
       <main className="flex-1 p-10">
-        {/* Page Header */}
         <h1 className="text-3xl font-semibold text-gray-900 mb-8">
           My Legal Cases
         </h1>
 
-        {/* CASE TABLE */}
         <div className="bg-white rounded-xl border border-borderColor overflow-hidden">
           <table className="w-full text-sm">
             <thead className="bg-light text-gray-700">
@@ -84,7 +49,7 @@ const UserDashboard = () => {
           </table>
         </div>
       </main>
-    </div>
+    </DashboardLayout>
   );
 };
 

@@ -8,6 +8,7 @@ const navItems = [
   { name: "Submit Query", path: "/submit-query" },
   { name: "Documents", path: "/legal-documents" },
   { name: "Contact Lawyer", path: "/contact-lawyer" },
+  { name: "Register as Lawyer", path: "/register-lawyer" },
   { name: "Contact", path: "/contact" },
 ];
 
@@ -32,10 +33,9 @@ const Navbar = () => {
               key={item.path}
               to={item.path}
               className={({ isActive }) =>
-                `text-sm font-medium transition-colors ${
-                  isActive
-                    ? "text-primary"
-                    : "text-gray-600 hover:text-primary"
+                `text-sm font-medium transition-colors ${isActive
+                  ? "text-primary"
+                  : "text-gray-600 hover:text-primary"
                 }`
               }
             >

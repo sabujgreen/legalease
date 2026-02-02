@@ -27,6 +27,7 @@ router.get("/me", protect, (req, res) => {
   res.json({
     user: {
       id: req.user._id,
+      name: req.user.name,
       role: req.user.role,
       email: req.user.email,
     },

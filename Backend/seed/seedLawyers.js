@@ -2,8 +2,8 @@ import mongoose from "mongoose";
 import User from "../src/models/User.model.js";
 import LawyerProfile from "../src/models/lawyer/LawyerProfile.model.js";
 
-
-const MONGO_URI = "mongodb+srv://chiragcj555_db_user:OFgbrQ9YyOQDvgmj@cluster0.we2ztfn.mongodb.net/?appName=Cluster0"; // change if needed
+const MONGO_URI =
+  "mongodb+srv://chiragcj555_db_user:OFgbrQ9YyOQDvgmj@cluster0.we2ztfn.mongodb.net/legalease";
 
 const lawyersData = [
   {
@@ -59,10 +59,10 @@ const lawyersData = [
 const seedLawyers = async () => {
   try {
     await mongoose.connect(MONGO_URI);
-    console.log("MongoDB connected");
+    console.log("✅ MongoDB connected");
 
     for (const lawyer of lawyersData) {
-      // Create User
+      // 1️⃣ Create User
       const user = await User.create({
         name: lawyer.name,
         email: lawyer.email,
@@ -71,30 +71,57 @@ const seedLawyers = async () => {
         isVerified: true,
       });
 
-      // Create Lawyer Profile
+      // 2️⃣ Create Lawyer Profile
       await LawyerProfile.create({
         userId: user._id,
+
+        mobile: "9999999999",
+        profilePhoto: null,
+
         barRegistrationNumber: `BAR-${Math.floor(
           100000 + Math.random() * 900000
         )}`,
         barCouncilState: lawyer.state,
-        specialization: lawyer.specialization,
+
+        yearOfEnrollment: 2015,
         experienceYears: lawyer.experienceYears,
+        specialization: lawyer.specialization,
+        courtsPracticedIn: "District Court, High Court",
+
         location: {
           city: lawyer.city,
           state: lawyer.state,
+          jurisdiction: lawyer.state,
         },
-        isAvailable: true,
+
+        lawDegree: "LLB",
+        universityName: "National Law University",
+        graduationYear: 2014,
+
+        professionalBio: `Experienced lawyer specializing in ${lawyer.specialization.join(
+          ", "
+        )}.`,
+        languagesSpoken: ["English", "Hindi"],
+
+        consultationType: "Both",
+        consultationFee: 1000,
+        availabilityStatus: "Available",
+
+        barCouncilCertificate: "dummy-bar-certificate.pdf",
+        identityProof: "dummy-id-proof.pdf",
+        degreeCertificate: "dummy-degree.pdf",
+
         verificationStatus: "APPROVED",
+        isAvailable: true,
       });
 
-      console.log(`Seeded lawyer: ${lawyer.name}`);
+      console.log(`👨‍⚖️ Seeded lawyer: ${lawyer.name}`);
     }
 
-    console.log("✅ Lawyers seeded successfully");
-    process.exit();
-  } catch (err) {
-    console.error(err);
+    console.log("🎉 Lawyers seeded successfully");
+    process.exit(0);
+  } catch (error) {
+    console.error("❌ Seeding failed:", error.message);
     process.exit(1);
   }
 };

@@ -5,8 +5,9 @@ import { allowRoles } from "../../middlewares/role.middleware.js";
 import { applyLawyerSchema } from "./lawyer.schema.js";
 import { onlyApprovedLawyer } from "../../middlewares/lawyer.middleware.js";
 import { lawyerDashboard } from "./lawyer.dashboard.controller.js";
-import {  getAssignedCases, respondToCase} from "./lawyer.case.controller.js";
+import { getAssignedCases, respondToCase } from "./lawyer.case.controller.js";
 import { getApprovedLawyers } from "./lawyer.controller.js";
+import { lawyerRegistrationUpload } from "../../middlewares/upload.middleware.js";
 
 
 
@@ -22,12 +23,12 @@ const validate = (schema) => (req, res, next) => {
   }
 };
 
-// Only verified USERS can apply
+// Only verified USERS can apply (with file uploads)
 router.post(
   "/apply",
   protect,
   allowRoles("USER"),
-  validate(applyLawyerSchema),
+  lawyerRegistrationUpload,  // ✅ Add multer middleware for file uploads
   applyAsLawyer
 );
 router.get(

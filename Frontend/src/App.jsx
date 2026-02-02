@@ -7,6 +7,7 @@ import LegalDocuments from "./pages/LegalDocuments";
 import ContactLawyer from "./pages/ContactLawyer";
 import Contact from "./pages/Contact";
 import LawyerResults from "./pages/LawyerResults";
+import LawyerRegistration from "./pages/LawyerRegistration";
 
 import LoginModal from "./components/LoginModal";
 import RegisterModal from "./components/RegisterModal";
@@ -28,14 +29,13 @@ function App() {
       {showOtp && <OtpModal />}
 
       <Routes>
-        <Route element={<MainLayout />}>
 
-          {/* PUBLIC ROUTES */}
+        {/* PUBLIC + NORMAL PROTECTED ROUTES */}
+        <Route element={<MainLayout />}>
           <Route path="/" element={<Home />} />
           <Route path="/legal-documents" element={<LegalDocuments />} />
           <Route path="/contact" element={<Contact />} />
 
-          {/* PROTECTED ROUTES */}
           <Route
             path="/chatbot"
             element={
@@ -73,15 +73,25 @@ function App() {
           />
 
           <Route
-            path="/dashboard"
+            path="/register-lawyer"
             element={
               <ProtectedRoute>
-                <UserDashboard />
+                <LawyerRegistration />
               </ProtectedRoute>
             }
           />
-
         </Route>
+
+        {/* DASHBOARD ROUTES (SEPARATE LAYOUT) */}
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <UserDashboard />
+            </ProtectedRoute>
+          }
+        />
+
       </Routes>
     </>
   );
