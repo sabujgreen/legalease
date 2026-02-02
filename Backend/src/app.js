@@ -10,6 +10,7 @@ import caseRoutes from "./modules/case/case.routes.js";
 import userRoutes from "./modules/user/user.routes.js";
 import cookieParser from "cookie-parser";
 import chatbotRoutes from "./modules/chatbot/chatbot.routes.js";
+import consultationRoutes from "./modules/consultation/consultation.routes.js";
 
 
 const app = express();
@@ -32,6 +33,7 @@ app.use("/api/admin", adminRoutes);
 app.use("/api/cases", caseRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/chatbot", chatbotRoutes);
+app.use("/api/consultation", consultationRoutes);
 
 
 

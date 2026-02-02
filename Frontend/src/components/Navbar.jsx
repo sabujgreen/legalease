@@ -1,4 +1,4 @@
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate, Link } from "react-router-dom";
 import { useAppContext } from "../context/AppContext";
 import { useAuth } from "../context/AuthContext";
 
@@ -22,9 +22,9 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto flex items-center justify-between">
 
         {/* LEFT: Logo */}
-        <h1 className="text-xl font-bold text-primary">
+        <Link to="/" className="text-xl font-bold text-primary hover:opacity-80 transition-opacity">
           LegalEase
-        </h1>
+        </Link>
 
         {/* CENTER: Navigation */}
         <div className="absolute left-1/2 -translate-x-1/2 flex gap-6">

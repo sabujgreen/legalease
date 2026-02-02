@@ -19,17 +19,27 @@ export const analyzeCase = async (req, res) => {
     caseData.status = "AI_PROCESSING";
     await caseData.save();
 
+    console.log("🔍 Analyzing case:", {
+      title: caseData.title,
+      description: caseData.description,
+      location: caseData.location,
+    });
+
     const aiResult = await analyzeCaseWithGroq({
       title: caseData.title,
       description: caseData.description,
       location: caseData.location,
     });
 
+    console.log("🤖 AI Analysis Result:", aiResult);
+
     caseData.aiAnalysis = aiResult;
     caseData.status = "AI_PROCESSED";
 
     // 2️⃣ Run lawyer matching
+    console.log("👨‍⚖️ Starting lawyer matching...");
     const suggestions = await matchLawyersForCase(caseData);
+    console.log("✅ Matched lawyers:", suggestions.length, suggestions);
 
     caseData.aiSuggestions = suggestions;
     await caseData.save();
@@ -40,13 +50,14 @@ export const analyzeCase = async (req, res) => {
       suggestions,
     });
   } catch (error) {
-    console.error(error);
+    console.error("❌ AI Analysis Error:", error);
 
     caseData.status = "AI_FAILED";
     await caseData.save();
 
     res.status(500).json({
       message: "AI analysis failed",
+      error: error.message,
     });
   }
 };

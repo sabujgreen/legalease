@@ -7,6 +7,42 @@ const normalize = (str = "") =>
   str.toLowerCase().replace(/\s+/g, "");
 
 /**
+ * Map AI specializations to related lawyer specializations
+ * This helps match when we don't have exact specialization matches
+ */
+const getRelatedSpecializations = (aiSpec) => {
+  const normalized = normalize(aiSpec);
+
+  // Property/Real Estate → Civil Law
+  if (normalized.includes("property") || normalized.includes("realestate") || normalized.includes("land")) {
+    return ["civillaw", "generalpractice", "propertylaw"];
+  }
+
+  // Family matters → Family Law or General
+  if (normalized.includes("family") || normalized.includes("divorce") || normalized.includes("custody")) {
+    return ["familylaw", "generalpractice"];
+  }
+
+  // Business/Corporate → Corporate Law or General
+  if (normalized.includes("corporate") || normalized.includes("business") || normalized.includes("company")) {
+    return ["corporatelaw", "generalpractice"];
+  }
+
+  // Criminal cases → Criminal Law
+  if (normalized.includes("criminal") || normalized.includes("theft") || normalized.includes("assault")) {
+    return ["criminallaw", "generalpractice"];
+  }
+
+  // Civil disputes → Civil Law
+  if (normalized.includes("civil") || normalized.includes("dispute") || normalized.includes("contract")) {
+    return ["civillaw", "generalpractice", "civildisputes"];
+  }
+
+  // Default: return the normalized spec and general practice
+  return [normalized, "generalpractice"];
+};
+
+/**
  * Get location score based on AI importance
  */
 const getLocationScore = (importance, sameState, sameCity) => {
@@ -26,35 +62,66 @@ const getLocationScore = (importance, sameState, sameCity) => {
 export const matchLawyersForCase = async (caseData) => {
   const { aiAnalysis, location: caseLocation } = caseData;
 
+  console.log("📋 Case Analysis Data:", {
+    aiAnalysis,
+    caseLocation,
+  });
+
   if (!aiAnalysis || !aiAnalysis.suggestedSpecializations?.length) {
+    console.log("❌ No AI analysis or specializations found");
     return [];
   }
 
   const normalizedAISpecs = aiAnalysis.suggestedSpecializations.map(normalize);
+  console.log("🎯 Normalized AI Specializations:", normalizedAISpecs);
 
   // 1️⃣ Fetch APPROVED lawyers only
   const lawyers = await LawyerProfile.find({
     verificationStatus: "APPROVED",
   }).populate("userId", "name email");
 
+  console.log(`👨‍⚖️ Found ${lawyers.length} approved lawyers in database`);
+
+  if (lawyers.length > 0) {
+    console.log("First lawyer example:", {
+      name: lawyers[0].userId?.name,
+      specialization: lawyers[0].specialization,
+      verificationStatus: lawyers[0].verificationStatus,
+    });
+  }
+
   const results = [];
 
   for (const lawyer of lawyers) {
     let score = 0;
 
-    // 2️⃣ Specialization match (AI tolerant)
-// 2️⃣ Specialization match (AI tolerant)
-    const hasSpecMatch = lawyer.specialization.some((spec) => {
-      const normSpec = normalize(spec);
-      return normalizedAISpecs.some(
-        (aiSpec) =>
-          aiSpec.includes(normSpec) || normSpec.includes(aiSpec)
-      );
+    // 2️⃣ Smart specialization match with related specs
+    const hasSpecMatch = lawyer.specialization.some((lawyerSpec) => {
+      const normLawyerSpec = normalize(lawyerSpec);
+
+      return normalizedAISpecs.some((aiSpec) => {
+        // Direct partial match
+        if (aiSpec.includes(normLawyerSpec) || normLawyerSpec.includes(aiSpec)) {
+          return true;
+        }
+
+        // Check related specializations
+        const relatedSpecs = getRelatedSpecializations(aiSpec);
+        return relatedSpecs.some(related =>
+          related.includes(normLawyerSpec) || normLawyerSpec.includes(related)
+        );
+      });
     });
 
-    // 🔴 ADD THIS RIGHT HERE
-    if (!hasSpecMatch && aiAnalysis.confidenceScore > 0.7) {
-      continue; // skip irrelevant lawyers
+    console.log(`🔍 Evaluating: ${lawyer.userId?.name}`, {
+      specs: lawyer.specialization,
+      hasMatch: hasSpecMatch,
+    });
+
+    // Only skip if NO match AND confidence is very high (90%+)
+    if (!hasSpecMatch && aiAnalysis.confidenceScore > 0.9) {
+      console.log("Skipping - no spec match");
+      continue;
     }
 
 
@@ -87,24 +154,28 @@ export const matchLawyersForCase = async (caseData) => {
       score += 10;
     }
 
-    // Ignore low-relevance lawyers
-  if (hasSpecMatch && score >= 40) {
-    results.push({
-      lawyerId: lawyer.userId._id,
-      name: lawyer.userId.name,
-      email: lawyer.userId.email,
-      specialization: lawyer.specialization,
-      experienceYears: lawyer.experienceYears,
-      score,
-      reason: "Matched based on specialization, location, experience, and availability",
-    });
+    console.log(`📊 Score: ${score}, Match: ${hasSpecMatch}`);
+
+    // Lower threshold to match more lawyers
+    if (hasSpecMatch && score >= 20) {
+      results.push({
+        _id: lawyer._id, // ✅ ADD THIS - Lawyer Profile ID for navigation
+        lawyerId: lawyer.userId._id,
+        name: lawyer.userId.name,
+        email: lawyer.userId.email,
+        specialization: lawyer.specialization,
+        experienceYears: lawyer.experienceYears,
+        location: lawyer.location,
+        score,
+        reason: "Matched based on specialization, location, experience, and availability",
+      });
+    }
+
+
+
+
   }
 
-
-
-
-    }
-  
 
   // 7️⃣ Sort & return top 5
   return results

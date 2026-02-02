@@ -8,6 +8,7 @@ import ContactLawyer from "./pages/ContactLawyer";
 import Contact from "./pages/Contact";
 import LawyerResults from "./pages/LawyerResults";
 import LawyerRegistration from "./pages/LawyerRegistration";
+import LawyerProfile from "./pages/LawyerProfile";
 
 import LoginModal from "./components/LoginModal";
 import RegisterModal from "./components/RegisterModal";
@@ -15,6 +16,13 @@ import OtpModal from "./components/OtpModal";
 
 import ProtectedRoute from "./routes/ProtectedRoute";
 import UserDashboard from "./pages/UserDashboard";
+import Dashboard from "./pages/Dashboard";
+import LawyerDashboard from "./pages/LawyerDashboard";
+import LawyerProfileEdit from "./pages/LawyerProfileEdit";
+import LawyerMyCases from "./pages/LawyerMyCases";
+import LawyerPendingApproval from "./pages/LawyerPendingApproval";
+import AdminLawyerApproval from "./pages/AdminLawyerApproval";
+import AdminAllLawyers from "./pages/AdminAllLawyers";
 
 import { useAppContext } from "./context/AppContext";
 
@@ -80,6 +88,15 @@ function App() {
               </ProtectedRoute>
             }
           />
+
+          <Route
+            path="/lawyer/:id"
+            element={
+              <ProtectedRoute>
+                <LawyerProfile />
+              </ProtectedRoute>
+            }
+          />
         </Route>
 
         {/* DASHBOARD ROUTES (SEPARATE LAYOUT) */}
@@ -87,7 +104,52 @@ function App() {
           path="/dashboard"
           element={
             <ProtectedRoute>
-              <UserDashboard />
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/dashboard/profile"
+          element={
+            <ProtectedRoute>
+              <LawyerProfileEdit />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/dashboard/cases"
+          element={
+            <ProtectedRoute>
+              <LawyerMyCases />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/lawyer/pending"
+          element={
+            <ProtectedRoute>
+              <LawyerPendingApproval />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/dashboard/lawyer-approvals"
+          element={
+            <ProtectedRoute>
+              <AdminLawyerApproval />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/dashboard/all-lawyers"
+          element={
+            <ProtectedRoute>
+              <AdminAllLawyers />
             </ProtectedRoute>
           }
         />

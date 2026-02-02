@@ -180,8 +180,8 @@ const LawyerResults = () => {
                                     {/* Contact Button */}
                                     <button
                                         onClick={() => {
-                                            // TODO: Implement contact/assign lawyer functionality
-                                            alert(`Contacting ${lawyer.userId?.name || lawyer.name}...`);
+                                            // Navigate to lawyer profile page
+                                            navigate(`/lawyer/${lawyer._id}`);
                                         }}
                                         className="mt-4 w-full px-4 py-2 rounded-lg bg-primary text-white text-sm font-medium hover:bg-primary-dull transition-colors"
                                     >

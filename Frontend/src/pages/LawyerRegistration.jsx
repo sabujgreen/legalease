@@ -1,14 +1,14 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { registerLawyer } from "../services/lawyer.api";
+import { registerLawyer, checkLawyerStatus } from "../services/lawyer.api";
 
 const LawyerRegistration = () => {
     const navigate = useNavigate();
     const { isAuthenticated, user } = useAuth();
 
-    const [registrationStatus, setRegistrationStatus] = useState(null); // null, 'checking', 'submitted', 'approved'
-    const [showForm, setShowForm] = useState(true);
+    const [registrationStatus, setRegistrationStatus] = useState("checking"); // 'checking', 'none', 'pending', 'approved'
+    const [showForm, setShowForm] = useState(false);
     const [loading, setLoading] = useState(false);
 
     const [form, setForm] = useState({
@@ -41,7 +41,13 @@ const LawyerRegistration = () => {
 
     // Check if user is already registered as lawyer
     useEffect(() => {
-        if (user) {
+        const checkStatus = async () => {
+            if (!user) {
+                setRegistrationStatus("none");
+                setShowForm(true);
+                return;
+            }
+
             // Pre-fill form
             setForm((prev) => ({
                 ...prev,
@@ -49,12 +55,32 @@ const LawyerRegistration = () => {
                 email: user.email || "",
             }));
 
-            // Check user role
-            if (user.role === "LAWYER") {
-                setRegistrationStatus("approved");
-                setShowForm(false);
+            try {
+                // Check if user already has a lawyer profile
+                const response = await checkLawyerStatus();
+                const profile = response.data;
+
+                if (profile.verificationStatus === "APPROVED") {
+                    setRegistrationStatus("approved");
+                    setShowForm(false);
+                } else if (profile.verificationStatus === "PENDING") {
+                    setRegistrationStatus("pending");
+                    setShowForm(false);
+                }
+            } catch (error) {
+                // No lawyer profile found - show registration form
+                if (error.response?.status === 404) {
+                    setRegistrationStatus("none");
+                    setShowForm(true);
+                } else {
+                    console.error("Error checking lawyer status:", error);
+                    setRegistrationStatus("none");
+                    setShowForm(true);
+                }
             }
-        }
+        };
+
+        checkStatus();
     }, [user]);
 
     const handleChange = (e) => {
@@ -134,8 +160,8 @@ const LawyerRegistration = () => {
 
             await registerLawyer(formData);
 
-            // Show success message
-            setRegistrationStatus("submitted");
+            // Update status to pending and hide form
+            setRegistrationStatus("pending");
             setShowForm(false);
         } catch (err) {
             console.error("Error submitting registration:", err);
@@ -152,8 +178,8 @@ const LawyerRegistration = () => {
         }
     };
 
-    // Success/Status Messages
-    if (registrationStatus === "submitted") {
+    // PENDING STATUS - Show when user has submitted but not yet approved
+    if (registrationStatus === "pending") {
         return (
             <section className="px-8 py-12 bg-gray-50 min-h-screen flex items-center justify-center">
                 <div className="max-w-2xl w-full bg-white border border-borderColor rounded-xl p-12 text-center">
@@ -219,6 +245,18 @@ const LawyerRegistration = () => {
                     >
                         Go to Dashboard
                     </button>
+                </div>
+            </section>
+        );
+    }
+
+    // CHECKING STATUS - Show loading state while checking status
+    if (registrationStatus === "checking") {
+        return (
+            <section className="px-8 py-12 bg-gray-50 min-h-screen flex items-center justify-center">
+                <div className="text-center">
+                    <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-primary mx-auto mb-4"></div>
+                    <p className="text-gray-600">Checking your registration status...</p>
                 </div>
             </section>
         );

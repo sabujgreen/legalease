@@ -6,7 +6,7 @@ import { applyLawyerSchema } from "./lawyer.schema.js";
 import { onlyApprovedLawyer } from "../../middlewares/lawyer.middleware.js";
 import { lawyerDashboard } from "./lawyer.dashboard.controller.js";
 import { getAssignedCases, respondToCase } from "./lawyer.case.controller.js";
-import { getApprovedLawyers } from "./lawyer.controller.js";
+import { getApprovedLawyers, getLawyerById, getMyProfile, updateLawyerProfile, getMyApplicationStatus } from "./lawyer.controller.js";
 import { lawyerRegistrationUpload } from "../../middlewares/upload.middleware.js";
 
 
@@ -53,8 +53,28 @@ router.post(
   respondToCase
 );
 
+// Get lawyer's own profile
+router.get(
+  "/my-profile",
+  protect,
+  allowRoles("LAWYER"),
+  getMyProfile
+);
+
+// Update lawyer's profile
+router.put(
+  "/profile",
+  protect,
+  allowRoles("LAWYER"),
+  lawyerRegistrationUpload,
+  updateLawyerProfile
+);
 
 router.get("/", getApprovedLawyers);
+router.get("/:id", getLawyerById);
+
+// Get application status
+router.get("/status/application", protect, getMyApplicationStatus);
 
 
 export default router;
