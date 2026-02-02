@@ -3,7 +3,7 @@ import User from "../src/models/User.model.js";
 import LawyerProfile from "../src/models/lawyer/LawyerProfile.model.js";
 
 const MONGO_URI =
-  "mongodb+srv://chiragcj555_db_user:OFgbrQ9YyOQDvgmj@cluster0.we2ztfn.mongodb.net/legalease";
+  "";
 
 const lawyersData = [
   {
