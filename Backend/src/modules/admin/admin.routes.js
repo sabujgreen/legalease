@@ -6,6 +6,7 @@ import {
   revokeLawyer,
   getPendingLawyers,
   getApprovedLawyers,
+  getRejectedLawyers,
 } from "./admin.controller.js";
 
 import { protect } from "../../middlewares/auth.middleware.js";
@@ -14,6 +15,12 @@ import { allowRoles } from "../../middlewares/role.middleware.js";
 const router = express.Router();
 
 // ADMIN only - Specific routes MUST come before general routes
+
+// Debug all admin requests
+router.use((req, res, next) => {
+  console.log(`🔎 ADMIN ROUTER HIT: ${req.method} ${req.url}`);
+  next();
+});
 
 // Get pending lawyers (specific route)
 router.get(
@@ -31,6 +38,14 @@ router.get(
   getApprovedLawyers
 );
 
+// Get rejected lawyers (specific route)
+router.get(
+  "/lawyers/rejected",
+  protect,
+  allowRoles("ADMIN"),
+  getRejectedLawyers
+);
+
 // Get all lawyers (general route)
 router.get(
   "/lawyers",
@@ -39,15 +54,15 @@ router.get(
   getLawyerApplications
 );
 
-router.patch(
+router.put(
   "/lawyers/:id/approve",
   protect,
   allowRoles("ADMIN"),
   approveLawyer
 );
 
-router.patch(
-  "/lawyers/:id/reject",
+router.put(
+  "/lawyers/:id/decline",
   protect,
   allowRoles("ADMIN"),
   rejectLawyer

@@ -18,6 +18,8 @@ export const getLawyerApplications = async (req, res) => {
  */
 export const approveLawyer = async (req, res) => {
   const { id } = req.params;
+  console.log(`👨‍⚖️ ADMIN APPROVE REQUEST: ID=${id}`);
+
 
   const profile = await LawyerProfile.findById(id);
 
@@ -108,7 +110,14 @@ export const getPendingLawyers = async (req, res) => {
       verificationStatus: "PENDING"
     }).populate("userId", "name email role");
 
-    res.json(pendingLawyers);
+    // Filter out corrupted profiles where user does not exist
+    const validPendingLawyers = pendingLawyers.filter(lawyer => lawyer.userId);
+
+    if (pendingLawyers.length !== validPendingLawyers.length) {
+      console.warn(`⚠️ Warning: Found ${pendingLawyers.length - validPendingLawyers.length} lawyer profiles with missing User references.`);
+    }
+
+    res.json(validPendingLawyers);
   } catch (error) {
     console.error("Error fetching pending lawyers:", error);
     res.status(500).json({
@@ -120,33 +129,43 @@ export const getPendingLawyers = async (req, res) => {
 
 /**
  * Get all approved lawyers
- * DEBUG VERSION - Returns all lawyers to check verification status
  */
 export const getApprovedLawyers = async (req, res) => {
   try {
-    // TEMPORARILY get ALL lawyers regardless of status
-    const allLawyers = await LawyerProfile.find()
-      .populate("userId", "name email role");
+    const approvedLawyers = await LawyerProfile.find({
+      verificationStatus: "APPROVED"
+    }).populate("userId", "name email role");
 
-    console.log("=== DEBUG: All Lawyers Query ===");
-    console.log(`Total lawyers found: ${allLawyers.length}`);
+    // Filter out corrupted profiles
+    const validApprovedLawyers = approvedLawyers.filter(l => l.userId);
 
-    if (allLawyers.length > 0) {
-      console.log("Sample lawyer statuses:");
-      allLawyers.forEach((lawyer, idx) => {
-        console.log(`${idx + 1}. ${lawyer.userId?.name || 'N/A'} - Status: ${lawyer.verificationStatus || 'NO STATUS'}`);
-      });
-
-      const approvedCount = allLawyers.filter(l => l.verificationStatus === "APPROVED").length;
-      console.log(`Approved lawyers: ${approvedCount}`);
-    }
-
-    // Return all lawyers for now
-    res.json(allLawyers);
+    res.json(validApprovedLawyers);
   } catch (error) {
-    console.error("Error fetching lawyers:", error);
+    console.error("Error fetching approved lawyers:", error);
     res.status(500).json({
-      message: "Failed to fetch lawyers",
+      message: "Failed to fetch approved lawyers",
+      error: error.message,
+    });
+  }
+};
+
+/**
+ * Get all rejected lawyers
+ */
+export const getRejectedLawyers = async (req, res) => {
+  try {
+    const rejectedLawyers = await LawyerProfile.find({
+      verificationStatus: "REJECTED"
+    }).populate("userId", "name email role");
+
+    // Filter out corrupted profiles
+    const validRejectedLawyers = rejectedLawyers.filter(l => l.userId);
+
+    res.json(validRejectedLawyers);
+  } catch (error) {
+    console.error("Error fetching rejected lawyers:", error);
+    res.status(500).json({
+      message: "Failed to fetch rejected lawyers",
       error: error.message,
     });
   }

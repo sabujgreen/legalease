@@ -82,8 +82,8 @@ export const applyAsLawyer = async (req, res) => {
       degreeCertificate: filePaths.degreeCertificate,
     });
 
-    // Update user role to LAWYER
-    await User.findByIdAndUpdate(user._id, { role: "LAWYER" });
+    // Do not upgrade role yet - wait for admin approval
+    // await User.findByIdAndUpdate(user._id, { role: "LAWYER" });
 
     res.status(201).json({
       message: "Lawyer application submitted successfully",

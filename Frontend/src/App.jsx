@@ -23,6 +23,7 @@ import LawyerMyCases from "./pages/LawyerMyCases";
 import LawyerPendingApproval from "./pages/LawyerPendingApproval";
 import AdminLawyerApproval from "./pages/AdminLawyerApproval";
 import AdminAllLawyers from "./pages/AdminAllLawyers";
+import AdminRejectedLawyers from "./pages/AdminRejectedLawyers";
 
 import { useAppContext } from "./context/AppContext";
 
@@ -150,6 +151,15 @@ function App() {
           element={
             <ProtectedRoute>
               <AdminAllLawyers />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/dashboard/rejected-lawyers"
+          element={
+            <ProtectedRoute>
+              <AdminRejectedLawyers />
             </ProtectedRoute>
           }
         />

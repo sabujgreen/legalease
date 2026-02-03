@@ -14,7 +14,7 @@ export const register = async (req, res) => {
   });
 
   // Email service will send OTP later
-  console.log("OTP for verification:", otp);
+  // For now, OTP is only logged to server.log file
 
   res.status(201).json({
     message: "User registered. Verify OTP.",

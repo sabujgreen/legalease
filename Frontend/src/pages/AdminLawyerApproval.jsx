@@ -14,11 +14,10 @@ const AdminLawyerApproval = () => {
 
     const fetchPendingLawyers = async () => {
         try {
-            const token = localStorage.getItem("token");
             const response = await axios.get(
                 "http://localhost:5000/api/admin/lawyers/pending",
                 {
-                    headers: { Authorization: `Bearer ${token}` },
+                    withCredentials: true,
                 }
             );
             setPendingLawyers(response.data);
@@ -34,12 +33,11 @@ const AdminLawyerApproval = () => {
 
         try {
             setProcessing(lawyerId);
-            const token = localStorage.getItem("token");
             await axios.put(
                 `http://localhost:5000/api/admin/lawyers/${lawyerId}/approve`,
                 {},
                 {
-                    headers: { Authorization: `Bearer ${token}` },
+                    withCredentials: true,
                 }
             );
 
@@ -59,12 +57,11 @@ const AdminLawyerApproval = () => {
 
         try {
             setProcessing(lawyerId);
-            const token = localStorage.getItem("token");
             await axios.put(
                 `http://localhost:5000/api/admin/lawyers/${lawyerId}/decline`,
                 {},
                 {
-                    headers: { Authorization: `Bearer ${token}` },
+                    withCredentials: true,
                 }
             );
 
