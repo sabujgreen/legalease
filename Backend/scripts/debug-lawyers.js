@@ -15,7 +15,7 @@ import User from "../src/models/User.model.js";
 
 const debugLawyers = async () => {
     try {
-        const uri = process.env.MONGODB_URI;
+        const uri = process.env.MONGO_URI;
         if (!uri) {
             throw new Error("MONGODB_URI is missing in .env");
         }
