@@ -1,24 +1,31 @@
 import multer from "multer";
-import path from "path";
-import { fileURLToPath } from "url";
+import { CloudinaryStorage } from "multer-storage-cloudinary";
+import cloudinary from "../config/cloudinary.js";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// Cloudinary storage config
+const storage = new CloudinaryStorage({
+  cloudinary,
+  params: (req, file) => {
+    let folder = "legalease/others";
+    let resourceType = "image";
 
-// Configure storage for uploaded files
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    // Use absolute path to Backend/uploads
-    const uploadPath = path.resolve("uploads");
-    cb(null, uploadPath);
-  },
-  filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    cb(null, file.fieldname + "-" + uniqueSuffix + path.extname(file.originalname));
+    // PDFs must be uploaded as raw
+    if (file.mimetype === "application/pdf") {
+      resourceType = "raw";
+      folder = "legalease/documents";
+    } else {
+      folder = "legalease/images";
+    }
+
+    return {
+      folder,
+      resource_type: resourceType,
+      public_id: `${file.fieldname}-${Date.now()}`,
+    };
   },
 });
 
-// File filter to accept images and PDFs
+// File filter (same logic, unchanged)
 const fileFilter = (req, file, cb) => {
   const allowedMimeTypes = [
     "image/jpeg",
@@ -30,11 +37,14 @@ const fileFilter = (req, file, cb) => {
   if (allowedMimeTypes.includes(file.mimetype)) {
     cb(null, true);
   } else {
-    cb(new Error("Only images (JPEG, JPG, PNG) and PDF files are allowed"), false);
+    cb(
+      new Error("Only images (JPEG, JPG, PNG) and PDF files are allowed"),
+      false
+    );
   }
 };
 
-// General upload middleware
+// Multer instance
 const upload = multer({
   storage,
   fileFilter,
@@ -43,7 +53,7 @@ const upload = multer({
   },
 });
 
-// Specific middleware for lawyer registration (handles 4 files)
+// Lawyer registration (4 files)
 export const lawyerRegistrationUpload = upload.fields([
   { name: "profilePhoto", maxCount: 1 },
   { name: "barCouncilCertificate", maxCount: 1 },

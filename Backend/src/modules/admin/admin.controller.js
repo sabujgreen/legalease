@@ -18,7 +18,6 @@ export const getLawyerApplications = async (req, res) => {
  */
 export const approveLawyer = async (req, res) => {
   const { id } = req.params;
-  console.log(`👨‍⚖️ ADMIN APPROVE REQUEST: ID=${id}`);
 
 
   const profile = await LawyerProfile.findById(id);

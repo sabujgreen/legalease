@@ -742,3 +742,45 @@
 [2026-02-03T08:43:46.134Z] 🔎 ADMIN ROUTER HIT: GET /lawyers/rejected
 [2026-02-03T15:32:19.144Z] MongoDB connected successfully
 [2026-02-03T15:32:19.165Z] LegalEase backend running on port 5000
+[2026-02-03T16:54:55.249Z] 🔍 Analyzing case: {"title":"","description":"Someone taken loan on my behalf, now i have to pay the loan, now, help please","location":{}}
+[2026-02-03T16:54:55.661Z] 🤖 AI Analysis Result: {"caseType":"Civil Law","subCategory":"Identity Theft/Fraud","urgency":"High","suggestedSpecializations":["Consumer Law","Fraud Law"],"locationImportance":"Low","confidenceScore":0.8}
+[2026-02-03T16:54:55.663Z] 👨‍⚖️ Starting lawyer matching...
+[2026-02-03T16:54:55.663Z] 📋 Case Analysis Data: {"aiAnalysis":{"caseType":"Civil Law","subCategory":"Identity Theft/Fraud","urgency":"High","suggestedSpecializations":["Consumer Law","Fraud Law"],"locationImportance":"Low","confidenceScore":0.8},"caseLocation":{}}
+[2026-02-03T16:54:55.664Z] 🎯 Normalized AI Specializations: ["consumerlaw","fraudlaw"]
+[2026-02-03T16:54:55.774Z] 👨‍⚖️ Found 8 approved lawyers in database
+[2026-02-03T16:54:55.775Z] First lawyer example: {"name":"Chirag Jain","specialization":["General Practice","Criminal Law","Civil Law"],"verificationStatus":"APPROVED"}
+[2026-02-03T16:54:55.776Z] 🔍 Evaluating: Chirag Jain {"specs":["General Practice","Criminal Law","Civil Law"],"hasMatch":true}
+[2026-02-03T16:54:55.776Z] 📊 Score: 80, Match: true
+[2026-02-03T16:54:55.776Z] 🔍 Evaluating: Amit Sharma {"specs":["Criminal Law","Civil Disputes"],"hasMatch":false}
+[2026-02-03T16:54:55.777Z] 📊 Score: 40, Match: false
+[2026-02-03T16:54:55.777Z] 🔍 Evaluating: Neha Verma {"specs":["Criminal Law","Civil Disputes"],"hasMatch":false}
+[2026-02-03T16:54:55.777Z] 📊 Score: 40, Match: false
+[2026-02-03T16:54:55.777Z] 🔍 Evaluating: Rohit Mehta {"specs":["Criminal Law","Civil Disputes"],"hasMatch":false}
+[2026-02-03T16:54:55.778Z] 📊 Score: 40, Match: false
+[2026-02-03T16:54:55.778Z] 🔍 Evaluating: Pooja Singh {"specs":["Criminal Law","Civil Disputes"],"hasMatch":false}
+[2026-02-03T16:54:55.778Z] 📊 Score: 40, Match: false
+[2026-02-03T16:54:55.778Z] 🔍 Evaluating: Sandeep Jain {"specs":["Criminal Law","Civil Disputes"],"hasMatch":false}
+[2026-02-03T16:54:55.778Z] 📊 Score: 40, Match: false
+[2026-02-03T16:54:55.778Z] 🔍 Evaluating: Anjali Kapoor {"specs":["Criminal Law","Civil Disputes"],"hasMatch":false}
+[2026-02-03T16:54:55.779Z] 📊 Score: 40, Match: false
+[2026-02-03T16:54:55.779Z] 🔍 Evaluating: dinesh {"specs":["General Practice"],"hasMatch":true}
+[2026-02-03T16:54:55.779Z] 📊 Score: 60, Match: true
+[2026-02-03T16:54:55.780Z] ✅ Matched lawyers: 2 [{"_id":"6980ad71c8362e29b9a791ed","lawyerId":"6980a6b9d61e613b54f88b83","name":"Chirag Jain","email":"chirag@gmail.com","specialization":["General Practice","Criminal Law","Civil Law"],"experienceYears":5,"location":{"city":"Jabalpur","state":"Madhya Pradesh","jurisdiction":""},"score":80,"reason":"Matched based on specialization, location, experience, and availability"},{"_id":"6981b032fc3be1d87d43e36d","lawyerId":"6981af841de34430da839ddc","name":"dinesh","email":"dinesh2@m.com","specialization":["General Practice"],"experienceYears":0,"location":{"city":"Jabalpur","state":"Madhya Pradesh","jurisdiction":""},"score":60,"reason":"Matched based on specialization, location, experience, and availability"}]
+[2026-02-03T17:16:00.674Z] MongoDB connected successfully
+[2026-02-03T17:16:00.685Z] LegalEase backend running on port 5000
+[2026-02-03T17:21:01.549Z] MongoDB connected successfully
+[2026-02-03T17:21:01.553Z] LegalEase backend running on port 5000
+[2026-02-03T17:23:40.933Z] MongoDB connected successfully
+[2026-02-03T17:23:40.938Z] LegalEase backend running on port 5000
+[2026-02-03T17:31:58.429Z] MongoDB connected successfully
+[2026-02-03T17:31:58.438Z] LegalEase backend running on port 5000
+[2026-02-03T17:32:03.627Z] --------------------------------
+[2026-02-03T17:32:03.627Z] GENERATED OTP: 192818
+[2026-02-03T17:32:03.628Z] --------------------------------
+[2026-02-03T18:39:01.447Z] --------------------------------
+[2026-02-03T18:39:01.457Z] GENERATED OTP: 546689
+[2026-02-03T18:39:01.458Z] --------------------------------
+[2026-02-03T18:42:09.527Z] MongoDB connected successfully
+[2026-02-03T18:42:09.539Z] LegalEase backend running on port 5000
+[2026-02-03T18:45:26.469Z] Email sent: %s <f9d430b6-fee9-bb2a-f3e2-e32fe18fcfa7@gmail.com>
+[2026-02-03T18:45:26.470Z] OTP sent to 23218@iiitu.ac.in

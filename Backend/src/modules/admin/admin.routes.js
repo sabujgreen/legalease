@@ -18,7 +18,6 @@ const router = express.Router();
 
 // Debug all admin requests
 router.use((req, res, next) => {
-  console.log(`🔎 ADMIN ROUTER HIT: ${req.method} ${req.url}`);
   next();
 });
 

@@ -62,33 +62,24 @@ const getLocationScore = (importance, sameState, sameCity) => {
 export const matchLawyersForCase = async (caseData) => {
   const { aiAnalysis, location: caseLocation } = caseData;
 
-  console.log("📋 Case Analysis Data:", {
-    aiAnalysis,
-    caseLocation,
-  });
+
 
   if (!aiAnalysis || !aiAnalysis.suggestedSpecializations?.length) {
-    console.log("❌ No AI analysis or specializations found");
+
     return [];
   }
 
   const normalizedAISpecs = aiAnalysis.suggestedSpecializations.map(normalize);
-  console.log("🎯 Normalized AI Specializations:", normalizedAISpecs);
+
 
   // 1️⃣ Fetch APPROVED lawyers only
   const lawyers = await LawyerProfile.find({
     verificationStatus: "APPROVED",
   }).populate("userId", "name email");
 
-  console.log(`👨‍⚖️ Found ${lawyers.length} approved lawyers in database`);
 
-  if (lawyers.length > 0) {
-    console.log("First lawyer example:", {
-      name: lawyers[0].userId?.name,
-      specialization: lawyers[0].specialization,
-      verificationStatus: lawyers[0].verificationStatus,
-    });
-  }
+
+
 
   const results = [];
 
@@ -113,14 +104,11 @@ export const matchLawyersForCase = async (caseData) => {
       });
     });
 
-    console.log(`🔍 Evaluating: ${lawyer.userId?.name}`, {
-      specs: lawyer.specialization,
-      hasMatch: hasSpecMatch,
-    });
+
 
     // Only skip if NO match AND confidence is very high (90%+)
     if (!hasSpecMatch && aiAnalysis.confidenceScore > 0.9) {
-      console.log("Skipping - no spec match");
+
       continue;
     }
 
@@ -154,7 +142,7 @@ export const matchLawyersForCase = async (caseData) => {
       score += 10;
     }
 
-    console.log(`📊 Score: ${score}, Match: ${hasSpecMatch}`);
+
 
     // Lower threshold to match more lawyers
     if (hasSpecMatch && score >= 20) {

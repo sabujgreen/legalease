@@ -1,6 +1,7 @@
 import User from "../../models/User.model.js";
 import { createOtp, verifyOtp } from "../../services/otp/otp.service.js";
 import { generateToken } from "../../utils/jwt.js";
+import { sendEmail } from "../../services/email/email.service.js";
 
 /**
  * Register user
@@ -8,13 +9,21 @@ import { generateToken } from "../../utils/jwt.js";
 export const register = async (req, res) => {
   const user = await User.create(req.body);
 
+
   const otp = await createOtp({
     userId: user._id,
     purpose: "EMAIL_VERIFICATION",
   });
 
-  // Email service will send OTP later
-  // For now, OTP is only logged to server.log file
+  // Send OTP via email
+  await sendEmail({
+    to: user.email,
+    subject: "LegalEase - Verify Your Email",
+    text: `Your verification code is: ${otp}`,
+    html: `<p>Your verification code is: <strong>${otp}</strong></p><p>This code expires in 10 minutes.</p>`,
+  });
+
+
 
   res.status(201).json({
     message: "User registered. Verify OTP.",
