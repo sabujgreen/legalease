@@ -726,3 +726,17 @@
 [2026-02-03T08:19:43.087Z]   ✅ User found: {"id":"6981af841de34430da839ddc","name":"dinesh","role":"USER"}
 [2026-02-03T08:21:41.581Z] MongoDB connected successfully
 [2026-02-03T08:21:41.588Z] LegalEase backend running on port 5000
+[2026-02-03T08:38:28.836Z] MongoDB connected successfully
+[2026-02-03T08:38:28.845Z] LegalEase backend running on port 5000
+[2026-02-03T08:38:30.689Z] 🔎 ADMIN ROUTER HIT: GET /lawyers/pending
+[2026-02-03T08:38:35.124Z] 🔎 ADMIN ROUTER HIT: PUT /lawyers/6981b032fc3be1d87d43e36d/approve
+[2026-02-03T08:38:35.188Z] 👨‍⚖️ ADMIN APPROVE REQUEST: ID=6981b032fc3be1d87d43e36d
+[2026-02-03T08:38:44.471Z] 🔎 ADMIN ROUTER HIT: GET /lawyers/pending
+[2026-02-03T08:38:46.516Z] 🔎 ADMIN ROUTER HIT: GET /lawyers/approved
+[2026-02-03T08:38:49.656Z] 🔎 ADMIN ROUTER HIT: GET /lawyers/pending
+[2026-02-03T08:38:52.312Z] 🔎 ADMIN ROUTER HIT: PUT /lawyers/69812b3470348d7431764e2a/decline
+[2026-02-03T08:38:56.664Z] 🔎 ADMIN ROUTER HIT: GET /lawyers/rejected
+[2026-02-03T08:42:04.413Z] 🔎 ADMIN ROUTER HIT: GET /lawyers/pending
+[2026-02-03T08:43:44.292Z] 🔎 ADMIN ROUTER HIT: GET /lawyers/approved
+[2026-02-03T08:43:45.165Z] 🔎 ADMIN ROUTER HIT: GET /lawyers/pending
+[2026-02-03T08:43:46.134Z] 🔎 ADMIN ROUTER HIT: GET /lawyers/rejected
