@@ -30,6 +30,7 @@ router.get("/me", protect, (req, res) => {
       name: req.user.name,
       role: req.user.role,
       email: req.user.email,
+      profileImage: req.user.profileImage,
     },
   });
 });

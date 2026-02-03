@@ -784,3 +784,7 @@
 [2026-02-03T18:42:09.539Z] LegalEase backend running on port 5000
 [2026-02-03T18:45:26.469Z] Email sent: %s <f9d430b6-fee9-bb2a-f3e2-e32fe18fcfa7@gmail.com>
 [2026-02-03T18:45:26.470Z] OTP sent to 23218@iiitu.ac.in
+[2026-02-03T19:21:59.431Z] MongoDB connected successfully
+[2026-02-03T19:21:59.437Z] LegalEase backend running on port 5000
+[2026-02-03T19:27:41.688Z] MongoDB connected successfully
+[2026-02-03T19:27:41.694Z] LegalEase backend running on port 5000

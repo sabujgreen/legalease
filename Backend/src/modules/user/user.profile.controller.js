@@ -7,19 +7,15 @@ export const uploadProfilePhoto = async (req, res) => {
   }
 
   try {
-    const result = await cloudinary.uploader.upload(
-      `data:${req.file.mimetype};base64,${req.file.buffer.toString("base64")}`,
-      {
-        folder: "legalease/profile_photos",
-        resource_type: "image",
-      }
-    );
+    // ✅ The image is already uploaded by the middleware
+    // req.file.path contains the Cloudinary URL
+    const imageUrl = req.file.path;
 
     const user = await User.findByIdAndUpdate(
       req.user._id,
       {
         profileImage: {
-          url: result.secure_url,
+          url: imageUrl,
           uploadedAt: new Date(),
         },
       },
