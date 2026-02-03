@@ -1,179 +1,153 @@
-# LegalEase Backend ⚖️
+# LegalEase 2.0 ⚖️
 
-LegalEase is an AI-powered legal assistance backend that helps users submit legal problems, intelligently matches them with suitable lawyers, and manages the complete case lifecycle.
-
-This repository contains the backend service for LegalEase, built with a clean, scalable, and production-ready architecture.
-
----
+LegalEase is an AI-powered legal assistance platform that bridges the gap between citizens and legal professionals. It allows users to submit legal problems, uses AI to categorize and analyze them, and intelligently matches them with the most suitable lawyers.
 
 ## 🚀 Key Features
 
-### 🔐 Authentication & Roles
-- User registration with OTP verification
-- Secure login using JWT
-- Role-based access control:
-  - USER
-  - LAWYER
-  - ADMIN
+### 🔐 Authentication & Security
+- **Secure Auth**: JWT-based authentication with HTTP-only cookies.
+- **Role-Based Access**: Distinct portals for Users, Lawyers, and Admins.
+- **Email Verification**: OTP-based email verification using Nodemailer.
 
----
+### 🧑‍⚖️ Lawyer Management
+- **Onboarding Workflow**: Lawyers can register and submit credentials.
+- **Admin Approval**: Admins review and approve/reject lawyer applications.
+- **Profile Management**: Lawyers can manage their specialization, experience, and availability.
 
-### 🧑‍⚖️ Lawyer Onboarding
-- Users can apply to become lawyers
-- Admin approval workflow
-- Lawyer profile management
-- Lawyers are only active after admin approval
+### 📂 Smart Case Management
+- **Case Submission**: Users can submit detailed legal queries.
+- **Status Tracking**: Track cases from `NEW` → `AI_PROCESSED` → `ASSIGNED` → `ACCEPTED` → `CLOSED`.
+- **Dashboard**: Dedicated dashboards for users to track cases and lawyers to manage requests.
 
----
-
-### 📂 Case Management
-- Users can submit legal cases
-- Each case has a unique case ID
-- Case lifecycle tracking:
-  NEW → AI_PROCESSING → AI_PROCESSED → ASSIGNED → ACCEPTED → CLOSED
-
----
-
-### 🧠 AI Case Analysis
-- AI-powered legal case classification using Groq
-- Extracts:
-  - Case type
-  - Sub-category
-  - Urgency
-  - Suggested legal specializations
-  - Location importance
-  - Confidence score
-- AI is used only for analysis, not decision-making
-
----
-
-### 🤝 Intelligent Lawyer Matching
-- Deterministic backend matching (no AI bias)
-- Lawyers ranked based on:
-  - Specialization match
-  - Location relevance
+### 🧠 AI & Intelligent Matching
+- **AI Analysis**: Uses **Groq AI** to analyze case descriptions, identify legal categories, urgency, and relevant laws.
+- **Smart Matching**: Deterministic algorithm matches cases to lawyers based on:
+  - Specialization
+  - Location
   - Experience
   - Availability
-  - Case urgency
-- Top 5 best-matched lawyers suggested per case
+- **No Bias**: AI is used for analysis, but the matching logic is transparent and rule-based.
 
----
-
-### 📸 Profile Photo Upload
-- Users (and lawyers) can upload profile photos
-- Images stored securely on Cloudinary
-- Only image URLs are stored in the database
-- Same profile photo is used across user & lawyer views
-
----
-
-### 🛡️ Security & Best Practices
-- Environment-based configuration
-- Secrets never committed to Git
-- Modular folder structure
-- Clean separation of concerns
-- Future-ready architecture
+### 📸 Profile & File Handing
+- **Cloudinary Integration**: Secure storage for profile pictures and document uploads.
+- **Profile Customization**: Users and lawyers can update their profile pictures.
 
 ---
 
 ## 🧱 Tech Stack
-- Node.js
-- Express.js
-- MongoDB (Mongoose)
-- JWT Authentication
-- Groq AI
-- Cloudinary
-- Multer
 
----
+### Frontend
+- **Framework**: React 19 (Vite)
+- **Styling**: Tailwind CSS
+- **State Management**: React Context API
+- **HTTP Client**: Axios
+- **Animations**: Framer Motion
+- **Notifications**: React Hot Toast
 
-## 📁 Project Structure
-
-src/
-├── config/
-├── middlewares/
-├── models/
-├── modules/
-│   ├── auth
-│   ├── user
-│   ├── lawyer
-│   ├── admin
-│   └── case
-├── services/
-│   ├── ai
-│   └── matching
-├── app.js
-└── server.js
+### Backend
+- **Runtime**: Node.js
+- **Framework**: Express.js
+- **Database**: MongoDB (Mongoose)
+- **Authentication**: JWT & Bcrypt
+- **AI Engine**: Groq SDK
+- **Storage**: Cloudinary
+- **Email**: Nodemailer
 
 ---
 
 ## ⚙️ Environment Setup
 
-Create a .env file in the project root.
+### 1. Backend Setup
+Create a `.env` file in the `Backend` directory:
+```env
+PORT=5000
+NODE_ENV=development
+MONGO_URI=your_mongodb_connection_string
+JWT_SECRET=your_jwt_secret
+JWT_EXPIRES_IN=7d
 
-### 🔑 Environment Variables
+# AI Configuration
+GROQ_API_KEY=your_groq_api_key
 
-PORT=4000  
-NODE_ENV=development  
+# Cloudinary (Image Storage)
+CLOUDINARY_CLOUD_NAME=your_cloud_name
+CLOUDINARY_API_KEY=your_api_key
+CLOUDINARY_API_SECRET=your_api_secret
 
-MONGO_URI=your_mongodb_connection_string  
+# Email Service
+EMAIL_USER=your_email@gmail.com
+EMAIL_PASS=your_app_specific_password
+```
 
-JWT_SECRET=your_jwt_secret  
-JWT_EXPIRES_IN=7d  
-
-GROQ_API_KEY=your_groq_api_key  
-
-CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name  
-CLOUDINARY_API_KEY=your_cloudinary_api_key  
-CLOUDINARY_API_SECRET=your_cloudinary_api_secret  
-
-⚠️ Never commit the .env file to GitHub.
-
----
-
-## ▶️ Running the Project Locally
-
-npm install  
-npm run dev  
-
-Server runs at:  
-http://localhost:4000  
-
-Health check:  
-GET /health
+### 2. Frontend Setup
+Create a `.env` file in the `frontend` directory:
+```env
+VITE_API_URL=http://localhost:5000/api
+```
+*(Notes: `VITE_API_URL` defaults to `http://localhost:5000/api` if not set, but recommended for deployment)*
 
 ---
 
-## 🧪 Important APIs
+## ▶️ Running Locally
 
-Upload profile photo  
-POST /api/user/profile/photo  
+### Start Backend
+```bash
+cd Backend
+npm install
+npm run dev
+```
+*Server runs on: http://localhost:5000*
 
-Analyze case (AI + matching)  
-POST /api/cases/:caseId/analyze  
-
-Assign lawyer  
-POST /api/cases/:caseId/assign  
-
-Lawyer dashboard  
-GET /api/lawyer/cases  
+### Start Frontend
+```bash
+cd frontend
+npm install
+npm run dev
+```
+*Frontend runs on: http://localhost:5173*
 
 ---
 
-## 📈 Future Enhancements
-- Document uploads (Bar certificate, ID proof)
-- In-app notifications
-- Lawyer ratings & reviews
-- User–lawyer chat
-- Frontend integration
-- Production deployment
+## 🚀 Deployment Guide
+
+### Backend (Render / Railway)
+1.  Push code to GitHub.
+2.  Create a new Web Service on **Render** or **Railway**.
+3.  Set **Root Directory** to `Backend`.
+4.  Set **Build Command**: `npm install`
+5.  Set **Start Command**: `npm start` (ensure `start` script exists in `package.json`, typically `node src/server.js`)
+6.  Add all **Environment Variables** from the Backend setup section.
+
+### Frontend (Vercel / Netlify)
+1.  Push code to GitHub.
+2.  Import project into **Vercel** or **Netlify**.
+3.  Set **Root Directory** to `frontend`.
+4.  Set **Build Command**: `npm run build`
+5.  Set **Output Directory**: `dist`
+6.  Add Environment Variable:
+    -   `VITE_API_URL`: Your deployed backend URL (e.g., `https://legalease-backend.onrender.com/api`)
+
+---
+
+## 🧪 API Documentation
+
+### Auth
+- `POST /api/auth/register` - Register new user/lawyer
+- `POST /api/auth/login` - Login
+- `GET /api/auth/me` - Get current user
+
+### Cases
+- `POST /api/cases` - Submit a new case
+- `GET /api/cases/my-cases` - Get user's cases
+- `POST /api/cases/:id/analyze` - Trigger AI analysis
+
+### User
+- `POST /api/user/profile/photo` - Upload profile picture
 
 ---
 
 ## 👨‍💻 Author
-Chirag Jain
+**Chirag Jain**
 
 ---
-
-## 📜 License
-This project is for educational and demonstration purposes.
+*Built with ❤️ for a fairer legal system.*
