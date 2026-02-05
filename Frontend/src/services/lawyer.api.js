@@ -1,8 +1,6 @@
 import axios from "axios";
 import api from "./api.js";
 
-const API_BASE = "http://localhost:5000/api";
-
 export const fetchLawyers = (search = "") => {
   return api.get(`/lawyer`, {
     params: { search },

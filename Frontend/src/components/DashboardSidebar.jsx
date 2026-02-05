@@ -1,7 +1,7 @@
 import { NavLink } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
-import axios from "axios";
+import api from "../services/api";
 
 import defaultAvatar from "../assets/image.png";
 
@@ -26,16 +26,11 @@ const DashboardSidebar = () => {
     formData.append("photo", file);
 
     try {
-      const response = await axios.post(
-        "http://localhost:5000/api/user/profile/photo",
-        formData,
-        {
-          withCredentials: true,
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      const response = await api.post("/user/profile/photo", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
       // Update global user context with new image
       setUser((prev) => ({
