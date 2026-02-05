@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import DashboardLayout from "../layouts/DashboardLayout";
 import AdminSidebar from "../components/AdminSidebar";
-import axios from "axios";
+import api from "../services/api";
 
 const AdminLawyerApproval = () => {
     const [pendingLawyers, setPendingLawyers] = useState([]);
@@ -14,12 +14,7 @@ const AdminLawyerApproval = () => {
 
     const fetchPendingLawyers = async () => {
         try {
-            const response = await axios.get(
-                "http://localhost:5000/api/admin/lawyers/pending",
-                {
-                    withCredentials: true,
-                }
-            );
+            const response = await api.get("/admin/lawyers/pending");
             setPendingLawyers(response.data);
         } catch (error) {
             console.error("Error fetching pending lawyers:", error);
@@ -33,13 +28,7 @@ const AdminLawyerApproval = () => {
 
         try {
             setProcessing(lawyerId);
-            await axios.put(
-                `http://localhost:5000/api/admin/lawyers/${lawyerId}/approve`,
-                {},
-                {
-                    withCredentials: true,
-                }
-            );
+            await api.put(`/admin/lawyers/${lawyerId}/approve`);
 
             alert("Lawyer approved successfully!");
             // Remove from list
@@ -57,13 +46,7 @@ const AdminLawyerApproval = () => {
 
         try {
             setProcessing(lawyerId);
-            await axios.put(
-                `http://localhost:5000/api/admin/lawyers/${lawyerId}/decline`,
-                {},
-                {
-                    withCredentials: true,
-                }
-            );
+            await api.put(`/admin/lawyers/${lawyerId}/decline`);
 
             alert("Lawyer application declined");
             // Remove from list

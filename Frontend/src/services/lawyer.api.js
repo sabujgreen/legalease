@@ -4,7 +4,7 @@ import api from "./api.js";
 const API_BASE = "http://localhost:5000/api";
 
 export const fetchLawyers = (search = "") => {
-  return axios.get(`${API_BASE}/lawyer`, {
+  return api.get(`/lawyer`, {
     params: { search },
   });
 };
@@ -29,7 +29,7 @@ export const registerLawyer = async (formData) => {
  * @returns {Promise<object>} Lawyer profile data
  */
 export const fetchLawyerById = (id) => {
-  return axios.get(`${API_BASE}/lawyer/${id}`);
+  return api.get(`/lawyer/${id}`);
 };
 
 /**

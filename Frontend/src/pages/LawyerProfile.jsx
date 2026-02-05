@@ -38,7 +38,11 @@ const LawyerProfile = () => {
 
     const getProfileImage = () => {
         if (lawyer?.profilePhoto) {
-            return `http://localhost:5000/${lawyer.profilePhoto.replace(/\\/g, "/")}`;
+            if (lawyer.profilePhoto.startsWith("http")) {
+                return lawyer.profilePhoto;
+            }
+            const baseUrl = import.meta.env.VITE_API_URL?.replace("/api", "") || "http://localhost:5000";
+            return `${baseUrl}/${lawyer.profilePhoto.replace(/\\/g, "/")}`;
         }
         return defaultLawyer;
     };

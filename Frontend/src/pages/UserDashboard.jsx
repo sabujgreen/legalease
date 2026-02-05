@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import DashboardLayout from "../layouts/DashboardLayout";
 import DashboardSidebar from "../components/DashboardSidebar";
-import axios from "axios";
+import api from "../services/api";
 
 const UserDashboard = () => {
   const [consultations, setConsultations] = useState([]);
@@ -14,12 +14,7 @@ const UserDashboard = () => {
   const fetchMyConsultations = async () => {
     try {
       // Fetch user's consultations from backend
-      const response = await axios.get(
-        "http://localhost:5000/api/consultation/my-requests",
-        {
-          withCredentials: true, // Use cookie authentication
-        }
-      );
+      const response = await api.get("/consultation/my-requests");
       setConsultations(response.data);
     } catch (error) {
       console.error("Error fetching consultations:", error);

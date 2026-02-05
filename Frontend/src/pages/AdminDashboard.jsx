@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import DashboardLayout from "../layouts/DashboardLayout";
 import AdminSidebar from "../components/AdminSidebar";
-import axios from "axios";
+import api from "../services/api";
 
 const AdminDashboard = () => {
     const [stats, setStats] = useState({
@@ -18,12 +18,8 @@ const AdminDashboard = () => {
         try {
             // Use cookies for authentication
             const [pendingRes, approvedRes] = await Promise.all([
-                axios.get("http://localhost:5000/api/admin/lawyers/pending", {
-                    withCredentials: true,
-                }),
-                axios.get("http://localhost:5000/api/lawyer/", {
-                    withCredentials: true,
-                }),
+                api.get("/admin/lawyers/pending"),
+                api.get("/lawyer/"),
             ]);
 
             setStats({

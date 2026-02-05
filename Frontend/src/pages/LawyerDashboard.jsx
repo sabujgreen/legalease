@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import DashboardLayout from "../layouts/DashboardLayout";
 import LawyerSidebar from "../components/LawyerSidebar";
-import axios from "axios";
+import api from "../services/api";
 
 const LawyerDashboard = () => {
     const [cases, setCases] = useState([]);
@@ -18,12 +18,7 @@ const LawyerDashboard = () => {
 
     const fetchCases = async () => {
         try {
-            const response = await axios.get(
-                "http://localhost:5000/api/consultation/lawyer/cases",
-                {
-                    withCredentials: true,
-                }
-            );
+            const response = await api.get("/consultation/lawyer/cases");
 
             const data = response.data;
             setCases(data);

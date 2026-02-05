@@ -133,7 +133,12 @@ const LawyerProfileEdit = () => {
             return URL.createObjectURL(form.profilePhoto);
         }
         if (profile?.profilePhoto) {
-            return `http://localhost:5000/${profile.profilePhoto.replace(/\\/g, "/")}`;
+            if (profile.profilePhoto.startsWith("http")) {
+                return profile.profilePhoto;
+            }
+            // Fallback for legacy relative paths
+            const baseUrl = import.meta.env.VITE_API_URL?.replace("/api", "") || "http://localhost:5000";
+            return `${baseUrl}/${profile.profilePhoto.replace(/\\/g, "/")}`;
         }
         return defaultLawyer;
     };

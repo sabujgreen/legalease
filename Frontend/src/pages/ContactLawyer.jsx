@@ -27,8 +27,12 @@ const ContactLawyer = () => {
 
   const getProfileImage = (lawyer) => {
     if (lawyer.profilePhoto) {
+      if (lawyer.profilePhoto.startsWith("http")) {
+        return lawyer.profilePhoto;
+      }
       // If profile photo exists, construct the backend URL
-      return `http://localhost:5000/${lawyer.profilePhoto.replace(/\\/g, "/")}`;
+      const baseUrl = import.meta.env.VITE_API_URL?.replace("/api", "") || "http://localhost:5000";
+      return `${baseUrl}/${lawyer.profilePhoto.replace(/\\/g, "/")}`;
     }
     return defaultLawyer;
   };

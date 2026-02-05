@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import DashboardLayout from "../layouts/DashboardLayout";
 import AdminSidebar from "../components/AdminSidebar";
-import axios from "axios";
+import api from "../services/api";
 import defaultLawyer from "../assets/default-lawyer.png";
 
 const AdminAllLawyers = () => {
@@ -18,12 +18,7 @@ const AdminAllLawyers = () => {
     const fetchAllLawyers = async () => {
         try {
             // Use cookies for authentication - no token needed
-            const response = await axios.get(
-                "http://localhost:5000/api/admin/lawyers/approved",
-                {
-                    withCredentials: true, // This automatically sends cookies
-                }
-            );
+            const response = await api.get("/admin/lawyers/approved");
             setLawyers(response.data);
         } catch (error) {
             console.error("Error fetching lawyers:", error);
@@ -46,13 +41,7 @@ const AdminAllLawyers = () => {
         try {
             setProcessing(true);
             // Use cookies for authentication
-            await axios.patch(
-                `http://localhost:5000/api/admin/lawyers/${selectedLawyer._id}/revoke`,
-                {},
-                {
-                    withCredentials: true,
-                }
-            );
+            await api.patch(`/admin/lawyers/${selectedLawyer._id}/revoke`);
 
             alert("Lawyer registration cancelled successfully!");
             setShowModal(false);
@@ -69,7 +58,11 @@ const AdminAllLawyers = () => {
 
     const getProfileImage = (lawyer) => {
         if (lawyer?.profilePhoto) {
-            return `http://localhost:5000/${lawyer.profilePhoto.replace(/\\/g, "/")}`;
+            if (lawyer.profilePhoto.startsWith("http")) {
+                return lawyer.profilePhoto;
+            }
+            const baseUrl = import.meta.env.VITE_API_URL?.replace("/api", "") || "http://localhost:5000";
+            return `${baseUrl}/${lawyer.profilePhoto.replace(/\\/g, "/")}`;
         }
         return defaultLawyer;
     };

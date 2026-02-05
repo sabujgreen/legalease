@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import DashboardLayout from "../layouts/DashboardLayout";
 import AdminSidebar from "../components/AdminSidebar";
-import axios from "axios";
+import api from "../services/api";
 import defaultLawyer from "../assets/default-lawyer.png";
 
 const AdminRejectedLawyers = () => {
@@ -17,12 +17,7 @@ const AdminRejectedLawyers = () => {
     const fetchRejectedLawyers = async () => {
         try {
             // Use cookies for authentication
-            const response = await axios.get(
-                "http://localhost:5000/api/admin/lawyers/rejected",
-                {
-                    withCredentials: true,
-                }
-            );
+            const response = await api.get("/admin/lawyers/rejected");
             setLawyers(response.data);
         } catch (error) {
             console.error("Error fetching rejected lawyers:", error);
@@ -39,7 +34,11 @@ const AdminRejectedLawyers = () => {
 
     const getProfileImage = (lawyer) => {
         if (lawyer?.profilePhoto) {
-            return `http://localhost:5000/${lawyer.profilePhoto.replace(/\\/g, "/")}`;
+            if (lawyer.profilePhoto.startsWith("http")) {
+                return lawyer.profilePhoto;
+            }
+            const baseUrl = import.meta.env.VITE_API_URL?.replace("/api", "") || "http://localhost:5000";
+            return `${baseUrl}/${lawyer.profilePhoto.replace(/\\/g, "/")}`;
         }
         return defaultLawyer;
     };

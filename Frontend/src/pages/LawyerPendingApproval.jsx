@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+// Replace axios import with api import
+import api from "../services/api";
 
 const LawyerPendingApproval = () => {
     const navigate = useNavigate();
@@ -14,12 +15,9 @@ const LawyerPendingApproval = () => {
     const checkApplicationStatus = async () => {
         try {
             const token = localStorage.getItem("token");
-            const response = await axios.get(
-                "http://localhost:5000/api/lawyer/status/application",
-                {
-                    headers: { Authorization: `Bearer ${token}` },
-                }
-            );
+            const response = await api.get("/lawyer/status/application", {
+                headers: { Authorization: `Bearer ${token}` },
+            });
 
             setStatus(response.data);
 

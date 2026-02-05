@@ -18,10 +18,11 @@ app.use(cookieParser());
 
 app.use(
   cors({
-    origin: "http://localhost:5173", // frontend URL
+    origin: process.env.CLIENT_URL || "http://localhost:5173", // Use env var for production
     credentials: true,
   })
 );
+
 
 app.use(express.json());
 
