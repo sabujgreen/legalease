@@ -58,25 +58,23 @@ const LawyerRegistration = () => {
             try {
                 // Check if user already has a lawyer profile
                 const response = await checkLawyerStatus();
-                const profile = response.data;
+                const { status } = response.data;
 
-                if (profile.verificationStatus === "APPROVED") {
+                if (status === "APPROVED") {
                     setRegistrationStatus("approved");
                     setShowForm(false);
-                } else if (profile.verificationStatus === "PENDING") {
+                } else if (status === "PENDING") {
                     setRegistrationStatus("pending");
                     setShowForm(false);
+                } else {
+                    // NOT_APPLIED or DECLINED
+                    setRegistrationStatus("none");
+                    setShowForm(true);
                 }
             } catch (error) {
-                // No lawyer profile found - show registration form
-                if (error.response?.status === 404) {
-                    setRegistrationStatus("none");
-                    setShowForm(true);
-                } else {
-                    console.error("Error checking lawyer status:", error);
-                    setRegistrationStatus("none");
-                    setShowForm(true);
-                }
+                console.error("Error checking lawyer status:", error);
+                setRegistrationStatus("none");
+                setShowForm(true);
             }
         };
 

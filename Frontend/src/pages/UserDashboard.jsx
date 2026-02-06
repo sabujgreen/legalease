@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import DashboardLayout from "../layouts/DashboardLayout";
 import DashboardSidebar from "../components/DashboardSidebar";
 import api from "../services/api";
@@ -76,12 +77,12 @@ const UserDashboard = () => {
             </svg>
             <h3 className="text-xl font-semibold text-gray-800 mb-2">No Consultations Yet</h3>
             <p className="text-gray-600 mb-6">You haven't requested any consultations</p>
-            <a
-              href="/contact/lawyer"
+            <Link
+              to="/contact-lawyer"
               className="inline-block px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary-dull transition-colors"
             >
               Find a Lawyer
-            </a>
+            </Link>
           </div>
         ) : (
           <div className="bg-white rounded-xl border border-borderColor overflow-hidden">

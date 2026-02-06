@@ -21,6 +21,7 @@ import LawyerDashboard from "./pages/LawyerDashboard";
 import LawyerProfileEdit from "./pages/LawyerProfileEdit";
 import LawyerMyCases from "./pages/LawyerMyCases";
 import LawyerPendingApproval from "./pages/LawyerPendingApproval";
+import LawyerConsultation from "./pages/LawyerConsultation";
 import AdminLawyerApproval from "./pages/AdminLawyerApproval";
 import AdminAllLawyers from "./pages/AdminAllLawyers";
 import AdminRejectedLawyers from "./pages/AdminRejectedLawyers";
@@ -133,6 +134,15 @@ function App() {
           element={
             <ProtectedRoute>
               <LawyerPendingApproval />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/dashboard/consultations"
+          element={
+            <ProtectedRoute>
+              <LawyerConsultation />
             </ProtectedRoute>
           }
         />

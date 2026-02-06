@@ -56,5 +56,5 @@ export const updateLawyerProfile = (formData) => {
  * @returns {Promise<object>} Status object with verificationStatus
  */
 export const checkLawyerStatus = () => {
-  return api.get("/lawyer/my-profile");
+  return api.get("/lawyer/status/application");
 };
