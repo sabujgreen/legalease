@@ -18,7 +18,7 @@ app.use(cookieParser());
 
 app.use(
   cors({
-    origin: process.env.CLIENT_URL || "http://localhost:5173", // Use env var for production
+    origin: process.env.VITE_API_URL || "http://localhost:5173", // Use env var for production
     credentials: true,
   })
 );
