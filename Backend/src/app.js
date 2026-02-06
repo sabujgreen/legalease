@@ -14,6 +14,8 @@ import consultationRoutes from "./modules/consultation/consultation.routes.js";
 
 
 const app = express();
+
+//Important
 app.set("trust proxy", 1); // ✅ Required for Render/Vercel to handle cookies correctly
 app.use(cookieParser());
 
