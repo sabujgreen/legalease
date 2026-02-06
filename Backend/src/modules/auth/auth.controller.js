@@ -56,8 +56,8 @@ export const verifyEmailOtp = async (req, res) => {
 
   res.cookie("token", token, {
     httpOnly: true,
-    secure: false,      // localhost
-    sameSite: "lax",
+    secure: true,      // localhost
+    sameSite: "none",
     path: "/",
     maxAge: 7 * 24 * 60 * 60 * 1000, // ✅ ADD THIS (7 days)
   });
