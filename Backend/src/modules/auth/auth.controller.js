@@ -96,10 +96,10 @@ export const login = async (req, res) => {
 
   res.cookie("token", token, {
     httpOnly: true,
-    secure: false,      // localhost
-    sameSite: "lax",
+    secure: true,      // ✅ Changed for Render (HTTPS)
+    sameSite: "none",  // ✅ Changed for Cross-Site (Vercel -> Render)
     path: "/",
-    maxAge: 7 * 24 * 60 * 60 * 1000, // ✅ ADD THIS (7 days)
+    maxAge: 7 * 24 * 60 * 60 * 1000,
   });
 
   res.json({
