@@ -1,4 +1,3 @@
-import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import LawyerProfile from '../src/models/lawyer/LawyerProfile.model.js';
 import User from '../src/models/User.model.js';

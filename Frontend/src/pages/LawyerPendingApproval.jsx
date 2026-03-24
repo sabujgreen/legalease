@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 // Replace axios import with api import
 import api from "../services/api";
@@ -8,11 +8,7 @@ const LawyerPendingApproval = () => {
     const [status, setStatus] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        checkApplicationStatus();
-    }, []);
-
-    const checkApplicationStatus = async () => {
+    const checkApplicationStatus = useCallback(async () => {
         try {
             const token = localStorage.getItem("token");
             const response = await api.get("/lawyer/status/application", {
@@ -30,7 +26,11 @@ const LawyerPendingApproval = () => {
         } finally {
             setLoading(false);
         }
-    };
+    }, [navigate]);
+
+    useEffect(() => {
+        checkApplicationStatus();
+    }, [checkApplicationStatus]);
 
     if (loading) {
         return (

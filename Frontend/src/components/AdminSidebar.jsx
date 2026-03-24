@@ -1,6 +1,5 @@
 import { NavLink } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import defaultLawyer from "../assets/default-lawyer.png";
 
 const AdminSidebar = () => {
     const { user } = useAuth();

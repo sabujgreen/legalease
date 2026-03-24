@@ -1,6 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import api from "../services/api";
-; // your axios instance with credentials
 
 const AuthContext = createContext();
 
@@ -16,7 +15,7 @@ export const AuthProvider = ({ children }) => {
         const res = await api.get("/auth/me");
         setUser(res.data.user);
         setIsAuthenticated(true);
-      } catch (err) {
+      } catch {
         setUser(null);
         setIsAuthenticated(false);
       } finally {
@@ -43,7 +42,7 @@ export const AuthProvider = ({ children }) => {
   const logout = async () => {
     try {
       await api.post("/auth/logout");
-    } catch (err) {
+    } catch {
       // ignore
     } finally {
       setUser(null);

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import DashboardLayout from "../layouts/DashboardLayout";
 import AdminSidebar from "../components/AdminSidebar";
 import api from "../services/api";
@@ -10,11 +10,7 @@ const AdminDashboard = () => {
         total: 0,
     });
 
-    useEffect(() => {
-        fetchStats();
-    }, []);
-
-    const fetchStats = async () => {
+    const fetchStats = useCallback(async () => {
         try {
             // Use cookies for authentication
             const [pendingRes, approvedRes] = await Promise.all([
@@ -30,7 +26,15 @@ const AdminDashboard = () => {
         } catch (error) {
             console.error("Error fetching stats:", error);
         }
-    };
+    }, []);
+
+    useEffect(() => {
+        const timeoutId = setTimeout(() => {
+            fetchStats();
+        }, 0);
+
+        return () => clearTimeout(timeoutId);
+    }, [fetchStats]);
 
     return (
         <DashboardLayout>

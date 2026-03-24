@@ -8,7 +8,6 @@ const LawyerRegistration = () => {
     const { isAuthenticated, user } = useAuth();
 
     const [registrationStatus, setRegistrationStatus] = useState("checking"); // 'checking', 'none', 'pending', 'approved'
-    const [showForm, setShowForm] = useState(false);
     const [loading, setLoading] = useState(false);
 
     const [form, setForm] = useState({
@@ -44,7 +43,6 @@ const LawyerRegistration = () => {
         const checkStatus = async () => {
             if (!user) {
                 setRegistrationStatus("none");
-                setShowForm(true);
                 return;
             }
 
@@ -62,19 +60,15 @@ const LawyerRegistration = () => {
 
                 if (status === "APPROVED") {
                     setRegistrationStatus("approved");
-                    setShowForm(false);
                 } else if (status === "PENDING") {
                     setRegistrationStatus("pending");
-                    setShowForm(false);
                 } else {
                     // NOT_APPLIED or DECLINED
                     setRegistrationStatus("none");
-                    setShowForm(true);
                 }
             } catch (error) {
                 console.error("Error checking lawyer status:", error);
                 setRegistrationStatus("none");
-                setShowForm(true);
             }
         };
 
@@ -160,7 +154,6 @@ const LawyerRegistration = () => {
 
             // Update status to pending and hide form
             setRegistrationStatus("pending");
-            setShowForm(false);
         } catch (err) {
             console.error("Error submitting registration:", err);
 

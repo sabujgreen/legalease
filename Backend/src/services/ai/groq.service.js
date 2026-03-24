@@ -66,13 +66,13 @@ Location: ${location?.city || ""}, ${location?.state || ""}`
 
     // Provide more specific error messages
     if (error.message?.includes("API key") || error.message?.includes("401")) {
-      throw new Error("Invalid Groq API key. Please check your GROQ_API_KEY in .env file. Get a free key at https://console.groq.com/keys");
+      throw new Error("Invalid Groq API key. Please check your GROQ_API_KEY in .env file. Get a free key at https://console.groq.com/keys", { cause: error });
     }
     if (error.message?.includes("model")) {
-      throw new Error("Invalid model name. The model 'llama-3.3-70b-versatile' may not be available.");
+      throw new Error("Invalid model name. The model 'llama-3.3-70b-versatile' may not be available.", { cause: error });
     }
     if (error.message?.includes("rate limit")) {
-      throw new Error("Rate limit exceeded. Please wait a moment and try again.");
+      throw new Error("Rate limit exceeded. Please wait a moment and try again.", { cause: error });
     }
 
     throw error;

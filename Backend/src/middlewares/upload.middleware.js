@@ -6,16 +6,16 @@ import cloudinary from "../config/cloudinary.js";
 const storage = new CloudinaryStorage({
   cloudinary,
   params: (req, file) => {
-    let folder = "legalease/others";
     let resourceType = "image";
 
     // PDFs must be uploaded as raw
     if (file.mimetype === "application/pdf") {
       resourceType = "raw";
-      folder = "legalease/documents";
-    } else {
-      folder = "legalease/images";
     }
+
+    const folder = file.mimetype === "application/pdf"
+      ? "legalease/documents"
+      : "legalease/images";
 
     return {
       folder,

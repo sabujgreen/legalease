@@ -1,5 +1,4 @@
 import LawyerProfile from "../../models/lawyer/LawyerProfile.model.js";
-import User from "../../models/User.model.js";
 
 export const applyAsLawyer = async (req, res) => {
   try {

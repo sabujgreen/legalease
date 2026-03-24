@@ -1,4 +1,3 @@
-import crypto from "crypto";
 import Otp from "../../models/otp/Otp.model.js";
 import User from "../../models/User.model.js";
 
