@@ -8,15 +8,19 @@ const ContactLawyer = () => {
   const [search, setSearch] = useState("");
   const [lawyers, setLawyers] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const loadLawyers = async () => {
       try {
         setLoading(true);
+        setError("");
         const res = await fetchLawyers(search);
-        setLawyers(res.data);
+        setLawyers(Array.isArray(res.data) ? res.data : []);
       } catch (err) {
         console.error("Failed to fetch lawyers", err);
+        setError(err?.response?.data?.message || "Failed to load lawyers. Please try again.");
+        setLawyers([]);
       } finally {
         setLoading(false);
       }
@@ -26,7 +30,7 @@ const ContactLawyer = () => {
   }, [search]);
 
   const getProfileImage = (lawyer) => {
-    if (lawyer.profilePhoto) {
+    if (typeof lawyer?.profilePhoto === "string" && lawyer.profilePhoto) {
       if (lawyer.profilePhoto.startsWith("http")) {
         return lawyer.profilePhoto;
       }
@@ -73,8 +77,25 @@ const ContactLawyer = () => {
                 <p className="mt-4 text-gray-500">Loading lawyers...</p>
               </div>
             </div>
+          ) : error ? (
+            <div className="col-span-full text-center py-12">
+              <p className="text-red-500">{error}</p>
+            </div>
           ) : lawyers.length > 0 ? (
             lawyers.map((lawyer) => (
+              (() => {
+                const userName = lawyer?.userId?.name || "Lawyer";
+                const specialization = Array.isArray(lawyer?.specialization)
+                  ? lawyer.specialization
+                  : [];
+                const city = lawyer?.location?.city || "Unknown city";
+                const state = lawyer?.location?.state || "Unknown state";
+                const years = Number.isFinite(lawyer?.experienceYears)
+                  ? lawyer.experienceYears
+                  : 0;
+                const consultationFee = lawyer?.consultationFee;
+
+                return (
               <div
                 key={lawyer._id}
                 onClick={() => handleCardClick(lawyer._id)}
@@ -85,7 +106,7 @@ const ContactLawyer = () => {
                   <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-gray-200 group-hover:border-primary transition-colors">
                     <img
                       src={getProfileImage(lawyer)}
-                      alt={lawyer.userId.name}
+                      alt={userName}
                       className="w-full h-full object-cover"
                       onError={(e) => {
                         e.target.src = defaultLawyer;
@@ -97,11 +118,11 @@ const ContactLawyer = () => {
                 {/* Lawyer Info */}
                 <div className="text-center">
                   <h2 className="text-lg font-semibold text-gray-900 group-hover:text-primary transition-colors">
-                    {lawyer.userId.name}
+                    {userName}
                   </h2>
 
                   <p className="mt-1 text-sm text-gray-500">
-                    {lawyer.barCouncilState}
+                    {lawyer.barCouncilState || "State not specified"}
                   </p>
                 </div>
 
@@ -113,8 +134,10 @@ const ContactLawyer = () => {
                     </svg>
                     <p className="text-sm text-gray-600">
                       <span className="font-medium">Specialization:</span>{" "}
-                      {lawyer.specialization.slice(0, 2).join(", ")}
-                      {lawyer.specialization.length > 2 && ` +${lawyer.specialization.length - 2}`}
+                      {specialization.length > 0
+                        ? specialization.slice(0, 2).join(", ")
+                        : "General Practice"}
+                      {specialization.length > 2 && ` +${specialization.length - 2}`}
                     </p>
                   </div>
 
@@ -124,7 +147,7 @@ const ContactLawyer = () => {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                     </svg>
                     <p className="text-sm text-gray-600">
-                      {lawyer.location.city}, {lawyer.location.state}
+                      {city}, {state}
                     </p>
                   </div>
 
@@ -133,7 +156,7 @@ const ContactLawyer = () => {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                     </svg>
                     <p className="text-sm text-gray-600">
-                      {lawyer.experienceYears} years experience
+                      {years} years experience
                     </p>
                   </div>
 
@@ -142,7 +165,7 @@ const ContactLawyer = () => {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                     <p className="text-sm text-gray-600">
-                      ₹{lawyer.consultationFee || "Negotiable"}
+                      ₹{consultationFee || "Negotiable"}
                     </p>
                   </div>
                 </div>
@@ -154,6 +177,8 @@ const ContactLawyer = () => {
                   View Full Profile
                 </button>
               </div>
+                );
+              })()
             ))
           ) : (
             <div className="col-span-full text-center py-12">
