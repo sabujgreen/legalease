@@ -14,7 +14,16 @@ const validate = (schema) => (req, res, next) => {
     schema.parse(req.body);
     next();
   } catch (err) {
-    return res.status(400).json({ error: err.errors });
+    const issues = err?.issues || err?.errors;
+
+    if (Array.isArray(issues) && issues.length > 0) {
+      return res.status(400).json({
+        message: issues[0].message,
+        errors: issues,
+      });
+    }
+
+    return res.status(400).json({ message: "Invalid request payload" });
   }
 };
 

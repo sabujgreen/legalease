@@ -12,11 +12,18 @@ const LoginModal = () => {
   const [loading, setLoading] = useState(false);
 
   const handleLogin = async () => {
+    const trimmedEmail = email.trim().toLowerCase();
+
+    if (!trimmedEmail || !password) {
+      alert("Please enter email and password.");
+      return;
+    }
+
     try {
       setLoading(true);
 
       await loginUser({
-        email,
+        email: trimmedEmail,
         password,
       });
 

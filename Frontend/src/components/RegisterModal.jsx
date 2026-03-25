@@ -17,12 +17,25 @@ const RegisterModal = () => {
   const [loading, setLoading] = useState(false);
 
   const handleRegister = async () => {
+    const trimmedName = name.trim();
+    const trimmedEmail = email.trim();
+
+    if (!trimmedName || !trimmedEmail || !password) {
+      alert("Please fill in name, email, and password.");
+      return;
+    }
+
+    if (password.length < 8) {
+      alert("Password must be at least 8 characters.");
+      return;
+    }
+
     try {
       setLoading(true);
 
       const res = await registerUser({
-        name,
-        email,
+        name: trimmedName,
+        email: trimmedEmail,
         password,
       });
 
@@ -35,7 +48,12 @@ const RegisterModal = () => {
       setShowOtp(true);
 
     } catch (e) {
-      alert(e.response?.data?.message || "Registration failed");
+      const backendMessage =
+        e.response?.data?.message ||
+        e.response?.data?.errors?.[0]?.message ||
+        "Registration failed";
+
+      alert(backendMessage);
     } finally {
       setLoading(false);
     }
