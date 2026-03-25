@@ -1,7 +1,16 @@
 import axios from "axios";
 
+const rawApiUrl =
+  import.meta.env.VITE_API_URL ||
+  "http://localhost:5000/api";
+
+const normalizedApiUrl = rawApiUrl.replace(/\/+$/, "");
+const baseURL = normalizedApiUrl.endsWith("/api")
+  ? normalizedApiUrl
+  : `${normalizedApiUrl}/api`;
+
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "http://localhost:5000/api",
+  baseURL,
   withCredentials: true, // ✅ REQUIRED for cookie auth
   headers: {
     "Content-Type": "application/json",
