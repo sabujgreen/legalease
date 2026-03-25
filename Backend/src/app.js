@@ -19,9 +19,35 @@ const app = express();
 app.set("trust proxy", 1); // ✅ Required for Render/Vercel to handle cookies correctly
 app.use(cookieParser());
 
+const configuredOrigins = [
+  ...(process.env.CLIENT_URLS || "")
+    .split(",")
+    .map((origin) => origin.trim())
+    .filter(Boolean),
+  ...(process.env.CLIENT_URL ? [process.env.CLIENT_URL.trim()] : []),
+  "http://localhost:5173",
+  "http://localhost:5174",
+];
+
+const allowedOrigins = [...new Set(configuredOrigins)];
+
+const isAllowedOrigin = (origin) => {
+  if (!origin) return true;
+  if (allowedOrigins.includes(origin)) return true;
+
+  // Allow Vercel preview and production app domains.
+  return /https:\/\/[a-z0-9-]+\.vercel\.app$/i.test(origin);
+};
+
 app.use(
   cors({
-    origin: process.env.CLIENT_URL || "http://localhost:5173",
+    origin: (origin, callback) => {
+      if (isAllowedOrigin(origin)) {
+        return callback(null, true);
+      }
+
+      return callback(new Error(`CORS blocked for origin: ${origin}`));
+    },
     credentials: true,
   })
 );
