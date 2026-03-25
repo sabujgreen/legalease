@@ -46,10 +46,13 @@ router.get("/me", protect, (req, res) => {
 
 // ✅ Logout (clears cookie)
 router.post("/logout", (req, res) => {
+  const isProduction = process.env.NODE_ENV === "production";
+
   res.clearCookie("token", {
     httpOnly: true,
-    sameSite: "lax",
-    secure: false,
+    sameSite: isProduction ? "none" : "lax",
+    secure: isProduction,
+    path: "/",
   });
 
   res.json({ message: "Logged out successfully" });
