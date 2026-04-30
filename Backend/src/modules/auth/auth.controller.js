@@ -126,12 +126,14 @@ export const verifyEmailOtp = async (req, res) => {
     role: user.role,
   });
 
+  const isProduction = process.env.NODE_ENV === "production";
+
   res.cookie("token", token, {
     httpOnly: true,
-    secure: true,      // localhost
-    sameSite: "none",
+    secure: isProduction,
+    sameSite: isProduction ? "none" : "lax",
     path: "/",
-    maxAge: 7 * 24 * 60 * 60 * 1000, // ✅ ADD THIS (7 days)
+    maxAge: 7 * 24 * 60 * 60 * 1000,
   });
 
   res.json({
@@ -209,4 +211,6 @@ export const login = async (req, res) => {
   }
 
 };
+
+
 
