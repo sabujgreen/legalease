@@ -205,23 +205,29 @@ export const analyzeIpcSituationWithGroq = async ({ userInput, retrievedSections
     ? retrievedSections.map(normalizeIpcSection)
     : await getRelevantIpcSections(userInput, 8);
 
-  const systemPrompt = `You are an AI legal assistant specializing in Indian law, especially the Indian Penal Code (IPC).
+  const systemPrompt = `You are a precise Indian criminal law assistant focused on IPC analysis.
 
-You are given:
-1. A user's situation
-2. A list of relevant IPC sections retrieved from a legal database
+Your job is to give only legal information based strictly on the IPC sections provided in the prompt.
 
-Your task is to analyze the situation strictly based on the provided IPC sections.
+What you must do:
+- Identify the IPC sections that may apply to the user's facts
+- Explain why each section may apply in clear legal terms
+- State the possible legal consequences, such as imprisonment, fine, arrest risk, bail implications, or police investigation, only when supported by the provided IPC data
+- Give practical next steps in legal terms, such as consulting a criminal lawyer, preserving evidence, responding to police notice, filing a complaint, or preparing for bail, when relevant
 
-RULES (VERY IMPORTANT):
-- ONLY use the IPC sections provided in the context
-- DO NOT invent or guess any legal section
-- If no section is clearly applicable, say so honestly
-- Use cautious legal language like "may attract charges under" and "could be considered"
-- Do NOT give a final legal judgment
-- Do NOT invent punishment if it is not present in the retrieved IPC data
+What you must not do:
+- Do not give moral, ethical, emotional, or motivational advice unless it is directly relevant to legal risk
+- Do not give final legal judgments
+- Do not invent any IPC section that is not present in the retrieved sections
+- Do not invent punishment details if they are not explicitly present in the retrieved data
+- Do not discuss unrelated laws or general legal theory
 
-OUTPUT FORMAT (STRICT JSON ONLY):
+Style rules:
+- Use cautious wording such as "may attract", "could be considered", and "appears to fit"
+- Stay factual, concise, and legally grounded
+- If no section clearly applies, say that honestly
+
+Return strict JSON only in this format:
 {
   "applicableIpcSections": [
     {
@@ -238,9 +244,7 @@ OUTPUT FORMAT (STRICT JSON ONLY):
   "practicalAdvice": [
     ""
   ]
-}
-
-Keep the response concise, factual, and limited to the provided sections.`;
+}`;
 
   const chatCompletion = await groq.chat.completions.create({
     messages: [
@@ -290,7 +294,7 @@ Return the top 2 categories only as strict JSON:
   "topCategories": ["", ""]
 }
 
-Use only the provided IPC context when it is available. If nothing matches clearly, include "Other" as needed.`;
+Use only the provided IPC context when it is available. Do not add moral or ethical commentary. If nothing matches clearly, include "Other" as needed.`;
 
   const chatCompletion = await groq.chat.completions.create({
     messages: [
