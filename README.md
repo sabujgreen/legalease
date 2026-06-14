@@ -147,7 +147,7 @@ npm run dev
 ---
 
 ## 👨‍💻 Author
-**Chirag Jain**
+**Sabuj Das**
 
 ---
 *Built with ❤️ for a fairer legal system.*
